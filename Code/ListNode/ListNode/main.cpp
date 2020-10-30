@@ -62,7 +62,7 @@ bool hasCycle(ListNode *head) {
 
 /*
  142.环形链表二（判断是否有环，并且返回对应的环的节点）
- 解题思路：快慢指针，hash表
+ 解题思路：快慢指针，判断是否有入环口
  https://leetcode-cn.com/problems/linked-list-cycle-ii/
  */
 ListNode *detectCyle(ListNode *head) {
@@ -415,6 +415,11 @@ ListNode* sortList(ListNode* head) {
     return result->next;
 }
 
+union endian {
+    char c;
+    int i;
+}en;
+
 int main(int argc, const char * argv[]) {
     ListNode *head = new ListNode(1);
     ListNode *node1 = new ListNode(2);
@@ -450,6 +455,14 @@ int main(int argc, const char * argv[]) {
     TreeSumNumbers sumNum = TreeSumNumbers();
     int total = sumNum.sumNumbers(root);
     cout << "sumNumber = " << total << endl;
+    
+    //判断是大端模式还是小端模式
+    en.i = 1;
+    if (en.c == 1) {
+        printf("little endian\n");
+    } else {
+        printf("big endian\n");
+    }
     
     return 0;
 }
