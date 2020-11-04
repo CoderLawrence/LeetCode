@@ -463,6 +463,6 @@ int main(int argc, const char * argv[]) {
     } else {
         printf("big endian\n");
     }
-    
+
     return 0;
 }
