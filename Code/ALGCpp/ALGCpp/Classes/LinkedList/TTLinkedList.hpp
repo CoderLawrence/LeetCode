@@ -176,7 +176,7 @@ public:
     
     void clear() {
         if (first == NULL) return;
-        for (TTNode<T> *x = first; x != NULL;) {
+        for (TTNode<T> *x = first; x != NULL;) { //断开所有节点，回收内存
             TTNode<T> *next = x->next;
             x->data = NULL;
             x->next = NULL;

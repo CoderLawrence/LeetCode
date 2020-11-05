@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2176AFCA255459C7007E659B /* TTCircleQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTCircleQueue.hpp; sourceTree = "<group>"; };
 		219391AA254FF4F2003A4A29 /* ALGCpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ALGCpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		219391AD254FF4F2003A4A29 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		219391B9254FF559003A4A29 /* TTStack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTStack.hpp; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				219A614925526F70004BBE5C /* TTQueue.hpp */,
+				2176AFCA255459C7007E659B /* TTCircleQueue.hpp */,
 			);
 			path = Queue;
 			sourceTree = "<group>";

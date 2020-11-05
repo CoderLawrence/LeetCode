@@ -9,6 +9,7 @@
 
 #include "TTStack.hpp"
 #include "TTQueue.hpp"
+#include "TTCircleQueue.hpp"
 
 #include <stack>
 #include <queue>
@@ -26,6 +27,7 @@ int main(int argc, const char * argv[]) {
     cout << stack.isEmpty() << endl;
     cout << stack.top() << endl;
     
+    //链表
     TTLinkedList<int> linkedList;
     linkedList.add(11);
     linkedList.add(22);
@@ -37,6 +39,7 @@ int main(int argc, const char * argv[]) {
     cout << "element:" << linkedList.remove(0) << endl;
     linkedList.clear();
     
+    //队列
     TTQueue<int> queue(11);
     queue.en_queue(33);
     queue.en_queue(44);
@@ -45,6 +48,12 @@ int main(int argc, const char * argv[]) {
     
     queue.de_queue();
     cout << "fornt:" << queue.front() << endl;
+    
+    //循环队列
+    TTCircleQueue<int> dqueue;
+    dqueue.en_queue_front(10);
+    dqueue.en_queue_front(20);
+    cout <<"dequeue::front:" << dqueue.front() << endl;
     
     return 0;
 }
