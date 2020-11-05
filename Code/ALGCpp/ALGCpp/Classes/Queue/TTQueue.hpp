@@ -21,7 +21,6 @@ public:
     }
     
     ~TTQueue() {
-        linkedList->clear();
         delete linkedList;
     }
     
@@ -33,16 +32,19 @@ public:
         return linkedList->isEmpty();
     }
     
+    /// 出队
     T de_queue() {
-        return linkedList->remove();
+        return linkedList->remove(0);
     }
     
-    void en_queue(T element) {
+    /// 入队
+    void en_queue(const T &element) {
         linkedList->add(element);
     }
     
+    /// 获取队头
     T front() {
-        return NULL;
+        return linkedList->get(0);
     }
     
     void clear() {
