@@ -9,6 +9,7 @@
 #include <set>
 #include <vector>
 #include <stack>
+#include <map>
 #include <unordered_map>
 
 using namespace std;
@@ -122,8 +123,51 @@ public:
     }
 };
 
+/*
+ 155. 最小栈
+ https://leetcode-cn.com/problems/min-stack/
+ */
+class MinStack {
+private:
+    vector<int> stack;
+    map<int, int> map;
+public:
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        stack.push_back(x);
+        map[x]++;
+    }
+    
+    void pop() {
+        int ele = top();
+        stack.pop_back();
+        if (map.find(ele) != map.begin()) {
+            int count = map[ele];
+            if (count == 1) {
+                map.erase(ele);
+            } else {
+                map[ele]--;
+            }
+        }
+    }
+    
+    int top() {
+        int ele = stack.back();
+        return ele;
+    }
+    
+    int getMin() {
+        auto min = map.begin();
+        return min->first;
+    }
+};
+
 int main(int argc, const char * argv[]) {
     smallestSubsequence("abbccddeeffa");
+    
     string str = "{{}}";
     bool res1 = isValid2(str);
     cout << "isValid:" << res1 << endl;

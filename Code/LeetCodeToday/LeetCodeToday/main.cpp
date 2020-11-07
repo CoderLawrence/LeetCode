@@ -69,6 +69,28 @@ bool validMountainArray(vector<int>& A) {
     return  left.size() != 1 && right.size() >= 1;
 }
 
+bool validMountainArray2(vector<int>& A) {
+    int size = (int)A.size();
+    if (size <= 0) return false;
+    int index = 0;
+    //先遍历上山，判断是否在递增
+    while (index + 1 < size && A[index] < A[index + 1]) {
+        index++;
+    }
+    
+    //如果是遍历完成，说明不能下山不能构成山脉，或者是没有上山过
+    if (index == 0 || index == size - 1) {
+        return false;
+    }
+    
+    //下山，判断是否在递减
+    while (index + 1 < size && A[index] > A[index + 1]) {
+        index++;
+    }
+    
+    return index == size - 1;
+}
+
 /************************************* 困难题 *********************************************/
 /*
  127. 单词接龙
@@ -111,7 +133,68 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
             endSet = tempSet;
         }
     }
+    
     return 0;
+}
+
+/*
+ 327. 区间和的个数
+ 解题思路：题意都没看懂...
+ https://leetcode-cn.com/problems/count-of-range-sum/
+ */
+int countRangeSumRecursive(vector<long>& sum, int lower, int upper, int left, int right) {
+    if (left == right) {
+        return 0;
+    } else {
+        int mid = (left + right) / 2;
+        int n1 = countRangeSumRecursive(sum, lower, upper, left, mid);
+        int n2 = countRangeSumRecursive(sum, lower, upper, mid + 1, right);
+        int ret = n1 + n2;
+        
+        // 首先统计下标对的数量
+        int i = left;
+        int l = mid + 1;
+        int r = mid + 1;
+        while (i <= mid) {
+            while (l <= right && sum[l] - sum[i] < lower) l++;
+            while (r <= right && sum[r] - sum[i] <= upper) r++;
+            ret += (r - l);
+            i++;
+        }
+        
+        // 随后合并两个排序数组
+        vector<int> sorted(right - left + 1);
+        int p1 = left, p2 = mid + 1;
+        int p = 0;
+        while (p1 <= mid || p2 <= right) {
+            if (p1 > mid) {
+                sorted[p++] = sum[p2++];
+            } else if (p2 > right) {
+                sorted[p++] = sum[p1++];
+            } else {
+                if (sum[p1] < sum[p2]) {
+                    sorted[p++] = sum[p1++];
+                } else {
+                    sorted[p++] = sum[p2++];
+                }
+            }
+        }
+        for (int i = 0; i < sorted.size(); i++) {
+            sum[left + i] = sorted[i];
+        }
+        return ret;
+    }
+}
+
+int countRangeSum(vector<int>& nums, int lower, int upper) {
+    long s = 0;
+    vector<long> sum{0};
+    for(auto& v: nums) {
+        s += v;
+        sum.push_back(s);
+    }
+    
+    return countRangeSumRecursive(sum, lower, upper, 0, sum.size() - 1);
 }
 
 int main(int argc, const char * argv[]) {
@@ -121,5 +204,11 @@ int main(int argc, const char * argv[]) {
     
     vector<int> nums3 = {0, 1, 2, 1, 2};
     bool res2 = validMountainArray(nums3);
+    cout << "validMountainArray:" << res2 << endl;
+    
+    vector<int> nums4 = {-2, 5, -1};
+    int res4 = countRangeSum(nums4, -2, 2);
+    cout << "validMountainArray:" << res4 << endl;
+    
     return 0;
 }
