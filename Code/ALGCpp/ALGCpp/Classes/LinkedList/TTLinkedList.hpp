@@ -34,18 +34,18 @@ class TTLinkedList {
 private:
     const int ELEMENT_NOT_FOUND = -1;
     
-    int m_size;
+    int m_size = 0;
     TTNode<T> *first;
     TTNode<T> *last;
     
     void rangeCheck(int index) {
-        if (m_size < 0 || index >= m_size) {
+        if (index < 0 || index >= m_size) {
             outOfBounds(index);
         }
     }
     
     void rangeCheckForAdd(int index) {
-        if (m_size < 0 || index > m_size) {
+        if (index < 0 || index > m_size) {
             outOfBounds(index);
         }
     }
@@ -150,9 +150,9 @@ public:
             next->prev = prev;
         }
         
+        m_size--;
         T element = node->data;
         delete node;
-        m_size--;
         return element;
     }
     
