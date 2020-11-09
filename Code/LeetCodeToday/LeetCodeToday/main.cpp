@@ -91,6 +91,39 @@ bool validMountainArray2(vector<int>& A) {
     return index == size - 1;
 }
 
+/*
+ 122. 买卖股票的最佳时机 II
+ 解题思路：动态规划
+ https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/
+ */
+int maxProfit(vector<int>& prices) {
+    int n = (int)prices.size();
+    int dp0 = 0, dp1 = -prices[0];
+    for (int i = 1; i < n; ++i) {
+        int newDp0 = max(dp0, dp1 + prices[i]);
+        int newDp1 = max(dp1, dp0 - prices[i]);
+        dp0 = newDp0;
+        dp1 = newDp1;
+    }
+    
+    return dp0;
+}
+
+/*
+ 解题思路：直接比较后一个数是否比前一个数大，如果是的话加上他们的差值
+ */
+int maxProfit2(vector<int>& prices) {
+    int res = 0;
+    int size = (int)prices.size();
+    for(int i = 1; i < size; ++i) {
+        if(prices[i] > prices[i-1]) {
+            res += prices[i] - prices[i-1];
+        }
+    }
+    
+    return res;
+}
+
 /************************************* 困难题 *********************************************/
 /*
  127. 单词接龙

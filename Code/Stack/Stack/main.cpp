@@ -85,7 +85,7 @@ private:
     stack<int> outStack;
 public:
     MyQueue() {
-
+        
     }
     
     void push(int x) {
@@ -165,6 +165,37 @@ public:
     }
 };
 
+/*
+ 496. 下一个更大元素 I
+ https://leetcode-cn.com/problems/next-greater-element-i/
+ */
+vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> res;
+    unordered_map<int, int> mymap;
+    stack<int> s;
+    //大区间的所有元素先入栈，并且找出最大元素，当元素大于栈顶元素时元素出栈，并且把元素存入hash表中
+    for (int i = 0; i < nums2.size(); ++i) {
+        while (!s.empty() && nums2[i] > s.top()) {
+            mymap[s.top()] = nums2[i];
+            s.pop();
+        }
+        
+        s.push(nums2[i]);
+    }
+    
+    //判断栈是否为空，如果找不到栈顶的元素那么全部置为-1
+    while (!s.empty()) {
+        mymap[s.top()] = -1;
+        s.pop();
+    }
+    
+    for (int i = 0; i < nums1.size(); ++i) {
+        res.push_back(mymap[nums1[i]]);
+    }
+    
+    return res;
+}
+
 int main(int argc, const char * argv[]) {
     smallestSubsequence("abbccddeeffa");
     
@@ -177,6 +208,13 @@ int main(int argc, const char * argv[]) {
     queue.push(2);
     cout << queue.peek() << endl;
     cout << queue.pop() << endl;
+    
+    vector<int> nums1 = {4, 1, 2};
+    vector<int> nums2 = {1, 3, 4, 2};
+    vector<int> res = nextGreaterElement(nums1, nums2);
+    for (int item : res) {
+        cout << "nextGreaterElement::" << item << endl;
+    }
     
     return 0;
 }
