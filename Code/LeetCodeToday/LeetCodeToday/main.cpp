@@ -191,6 +191,21 @@ vector<int> sortByBits2(vector<int> &arr) {
     return arr;
 }
 
+/************************************* 中等难度 *******************************************/
+/*
+ 973. 最接近原点的 K 个点
+ 解题思路：直接抄答案
+ https://leetcode-cn.com/problems/k-closest-points-to-origin/
+ */
+vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+    nth_element(points.begin(), points.begin() + K, points.end(), [](auto&& l, auto&& r) {
+        return l[0] * l[0] + l[1] * l[1] < r[0] * r[0] + r[1] *r[1];
+    });
+    
+    points.resize(K);
+    return points;
+}
+
 /************************************* 困难题 *********************************************/
 /*
  127. 单词接龙
