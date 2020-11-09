@@ -9,7 +9,7 @@
 #define TTLinkedList_hpp
 
 #include <iostream>
-#include <optional>
+#include <set>
 
 using namespace std;
 
@@ -51,7 +51,7 @@ private:
     }
     
     void outOfBounds(int index) {
-        
+        throw string("outOfBounds index %d", index);
     }
     
     TTNode<T> *getNode(const int index) {

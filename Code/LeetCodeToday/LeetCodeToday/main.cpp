@@ -8,7 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <set>
+#include <map>
 #include <stack>
 
 using namespace std;
@@ -124,6 +126,71 @@ int maxProfit2(vector<int>& prices) {
     return res;
 }
 
+/*
+ 1356. 根据数字二进制下 1 的数目排序
+ https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/
+ */
+int convertDecimalToBinary(int n) {
+    int remainder = 0;
+    int count = 0;
+    while(n != 0) {
+        remainder = n % 2;
+        if (remainder == 1) count++;
+        n /= 2;
+    }
+    
+    return count;
+}
+
+vector<int> sortByBits(vector<int>& arr) {
+    map<int, vector<int>> bits = {};
+    for (int item: arr) {
+        int temp = item;
+        int count = convertDecimalToBinary(temp);
+        if (bits.find(count) != bits.end()) {
+            vector<int> vecs = bits.find(count)->second;
+            vecs.push_back(item);
+            bits[count] = vecs;
+        } else {
+            vector<int> vecs;
+            vecs.push_back(item);
+            bits[count] = vecs;
+        }
+    }
+    
+    vector<int> res;
+    for (map<int, vector<int>>::iterator it = bits.begin(); it != bits.end(); it++) {
+        vector<int> elements = it->second;
+        if (elements.size()) {
+            sort(elements.begin(), elements.end());
+            res.insert(res.end(), elements.begin(), elements.end());
+        }
+    }
+    
+    return res;
+}
+
+vector<int> sortByBits2(vector<int> &arr) {
+    vector<int> bit(10001, 0);
+    for (auto item: arr) {
+        bit[item] = convertDecimalToBinary(item);
+    }
+    
+    sort(arr.begin(), arr.end(), [&](int x, int y) {
+        if (bit[x] < bit[y]) {
+            return true;
+        }
+        
+        if (bit[x] > bit[y]) {
+            return false;
+        }
+        
+        return x < y;
+    });
+    
+    return arr;
+}
+
 /************************************* 困难题 *********************************************/
 /*
  127. 单词接龙
@@ -144,6 +211,7 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         for (auto s : beginSet) {
             wordDict.erase(s);
         }
+        
         for (auto s : beginSet) {
             for (int i = 0; i < s.size(); ++i){
                 string str = s;
@@ -159,6 +227,7 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
                 }
             }
         }
+        
         if (tempSet.size() < endSet.size()){
             beginSet = tempSet;
         } else {
@@ -242,6 +311,12 @@ int main(int argc, const char * argv[]) {
     vector<int> nums4 = {-2, 5, -1};
     int res4 = countRangeSum(nums4, -2, 2);
     cout << "validMountainArray:" << res4 << endl;
+    
+    vector<int> nums5 = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    vector<int> res5 = sortByBits(nums4);
+    for (auto item: res5) {
+        cout << "sortByBits:" << item << endl;
+    }
     
     return 0;
 }
