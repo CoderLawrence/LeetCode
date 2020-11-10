@@ -52,20 +52,10 @@ int main(int argc, const char * argv[]) {
     
     //循环队列
     TTCircleQueue<int> dqueue;
-    dqueue.en_queue_front(11);
-    dqueue.en_queue_front(22);
-    dqueue.en_queue_front(33);
-    dqueue.en_queue_front(44);
-    dqueue.en_queue_front(55);
-    dqueue.en_queue_front(66);
-    dqueue.en_queue_front(77);
-    dqueue.en_queue_front(88);
-    dqueue.en_queue_front(99);
-    dqueue.en_queue_front(11);
-    dqueue.en_queue_front(12);
-    dqueue.en_queue_front(13);
-    dqueue.en_queue_front(14);
-    dqueue.en_queue_front(15);
+    for (int i = 0; i < 15; i++) {
+        dqueue.en_queue_front(i + 1);
+        dqueue.en_queue_rear(100 + i + 1);
+    }
     
     while (!dqueue.isEmpty()) {
         cout <<"dequeue::de_queue_rear():" << dqueue.de_queue_rear() << endl;

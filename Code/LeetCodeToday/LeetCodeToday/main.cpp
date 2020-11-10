@@ -18,6 +18,21 @@ using namespace std;
 /******************************* 坚持不懈， 每日一题 ***********************************/
 
 /*
+ 数组反转
+ 解题思路：前半部分与后半部分交换
+ */
+vector<int> reverseArrayList(vector<int> &arr) {
+    int len = (int)arr.size();
+    for (int i = 0; i < len/2; i++) {
+        int temp = arr[len - i - 1];
+        arr[len - i - 1] = arr[i];
+        arr[i] = temp;
+    }
+    
+    return arr;
+}
+
+/*
  349. 两个数组的交集
  解题思路：使用hash方法去重
  https://leetcode-cn.com/problems/intersection-of-two-arrays/

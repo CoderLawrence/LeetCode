@@ -58,9 +58,7 @@ public:
     }
     
     ~TTCircleQueue() {
-        if (m_elements != nullptr) {
-            free(m_elements);
-        }
+        clear();
     }
     
     int size() const {
@@ -108,9 +106,13 @@ public:
         return m_elements[m_size - 1];
     }
     
-    void clear() const {
+    void clear() {
         m_size = 0;
         m_front = 0;
+        if (m_elements != nullptr) {
+            free(m_elements);
+            m_elements = nullptr;
+        }
     }
 };
 
