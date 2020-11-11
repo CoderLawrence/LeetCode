@@ -206,6 +206,63 @@ vector<int> sortByBits2(vector<int> &arr) {
     return arr;
 }
 
+/*
+ 922. 按奇偶排序数组 II
+ https://leetcode-cn.com/problems/sort-array-by-parity-ii/
+ */
+vector<int> sortArrayByParityII(vector<int>& A) {
+    int len = (int)A.size();
+    vector<int> nums1;
+    vector<int> nums2;
+    for (int i = 0; i < len; i++) {
+        int ele = A[i];
+        if (ele % 2 == 0) {
+            nums1.push_back(ele);
+        } else {
+            nums2.push_back(ele);
+        }
+    }
+    
+    vector<int> res;
+    for (int i = 0; i < len; i++) {
+        //偶数索引
+        if (i % 2 == 0) {
+            res.push_back(nums1.back());
+            nums1.pop_back();
+        } else {
+            res.push_back(nums2.back());
+            nums2.pop_back();
+        }
+    }
+    
+    return res;
+}
+
+vector<int> sortArrayByParityII2(vector<int>& A) {
+    int len = (int)A.size();
+    vector<int> res(len);
+    
+    //偶数，把结果放入到res[0] res[2] res[4]...
+    int i = 0;
+    for (int x: A) {
+        if (x % 2 == 0) {
+            res[i] = x;
+            i += 2;
+        }
+    }
+    
+    //奇数，把结果放入到res[1] res[3]...
+    i = 1;
+    for (int x: A) {
+        if (x % 2 == 1) {
+            res[i] = x;
+            i += 2;
+        }
+    }
+    
+    return res;
+}
+
 /************************************* 中等难度 *******************************************/
 /*
  973. 最接近原点的 K 个点
@@ -222,6 +279,7 @@ vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
 }
 
 /************************************* 困难题 *********************************************/
+
 /*
  127. 单词接龙
  解题思路：无，抄答案
@@ -346,6 +404,12 @@ int main(int argc, const char * argv[]) {
     vector<int> res5 = sortByBits(nums4);
     for (auto item: res5) {
         cout << "sortByBits:" << item << endl;
+    }
+    
+    vector<int> nums6 = {4, 2, 5, 7};
+    vector<int> res6 = sortArrayByParityII(nums6);
+    for (auto item: res6) {
+        cout << "sortArrayByParityII:" << item << endl;
     }
     
     return 0;
