@@ -17,6 +17,7 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
     
+    cout << "--------- TTStack ------------------ " << endl;
     //使用数组实现栈
     TTStack<int> stack(22);
     stack.push(33);
@@ -27,6 +28,7 @@ int main(int argc, const char * argv[]) {
     cout << stack.isEmpty() << endl;
     cout << stack.top() << endl;
     
+    cout << "--------- TTLinkedList ------------------ " << endl;
     //双向链表
     TTLinkedList<int> linkedList;
     linkedList.add(11);
@@ -39,6 +41,7 @@ int main(int argc, const char * argv[]) {
     cout << "element:" << linkedList.remove(0) << endl;
     linkedList.clear();
     
+    cout << "--------- TTQueue ------------------ " << endl;
     //基于双向链表实现的队列
     TTQueue<int> queue(11);
     queue.en_queue(33);
@@ -49,6 +52,7 @@ int main(int argc, const char * argv[]) {
     queue.de_queue();
     cout << "fornt:" << queue.front() << endl;
     
+    cout << "--------- TTCircleQueue ------------------ " << endl;
     //循环队列
     TTCircleQueue<int> dqueue;
     for (int i = 0; i < 15; i++) {
@@ -60,9 +64,17 @@ int main(int argc, const char * argv[]) {
         cout <<"dequeue::de_queue_rear():" << dqueue.de_queue_rear() << endl;
     }
     
+    cout << "--------- TTBSTree ------------------ " << endl;
     //二叉搜索树
     TTBSTree<int> BSTree;
     BSTree.add(11);
+    BSTree.add(5);
+    BSTree.add(8);
+    BSTree.add(6);
+    BSTree.add(1);
+    BSTree.add(12);
+    BSTree.add(13);
+    BSTree.add(16);
     cout << BSTree.size() << endl;
     
     return 0;
