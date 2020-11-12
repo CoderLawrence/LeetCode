@@ -11,8 +11,7 @@
 #include "TTQueue.hpp"
 #include "TTCircleQueue.hpp"
 
-#include <stack>
-#include <queue>
+#include "TTBSTree.hpp"
 
 using namespace std;
 
@@ -60,6 +59,11 @@ int main(int argc, const char * argv[]) {
     while (!dqueue.isEmpty()) {
         cout <<"dequeue::de_queue_rear():" << dqueue.de_queue_rear() << endl;
     }
+    
+    //二叉搜索树
+    TTBSTree<int> BSTree;
+    BSTree.add(11);
+    cout << BSTree.size() << endl;
     
     return 0;
 }

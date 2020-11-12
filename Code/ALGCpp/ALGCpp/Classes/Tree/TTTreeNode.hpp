@@ -8,15 +8,16 @@
 #ifndef TTTreeNode_hpp
 #define TTTreeNode_hpp
 
-template <T>
+template <class T>
 class TTTreeNode {
 public:
     T data;
     TTTreeNode<T> *left;
     TTTreeNode<T> *right;
-    TTTreeNode(const T &x): data(T),
-                            left(NULL),
-                            right(NULL) {}
+    TTTreeNode<T> *parent;
+    TTTreeNode():TTTreeNode(NULL, NULL) {}
+    TTTreeNode(const T &x, TTTreeNode<T> *parent):
+            data(x), left(NULL), right(NULL), parent(parent) {}
 };
 
 #endif /* TTTreeNode_hpp */
