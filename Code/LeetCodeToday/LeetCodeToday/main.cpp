@@ -263,6 +263,44 @@ vector<int> sortArrayByParityII2(vector<int>& A) {
     return res;
 }
 
+/*
+ 1122. 数组的相对排序
+ https://leetcode-cn.com/problems/relative-sort-array/
+ */
+vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+    map<int, int> map;
+    for (int ele: arr1) {
+        map[ele]++;
+    }
+    
+    vector<int> res;
+    for (int i = 0; i < arr2.size(); i++) {
+        if (map.find(arr2[i]) != map.end()) {
+            int count = map.find(arr2[i])->second;
+            while (count > 0) {
+                res.push_back(arr2[i]);
+                count--;
+            }
+            
+            map.erase(arr2[i]);
+        }
+    }
+    
+    for (auto ele = map.begin(); ele != map.end(); ele++) {
+        if (ele->second > 1) {
+            int count = ele->second;
+            while (count > 0) {
+                res.push_back(ele->first);
+                count--;
+            }
+        } else {
+            res.push_back(ele->first);
+        }
+    }
+    
+    return res;
+}
+
 /************************************* 中等难度 *******************************************/
 /*
  973. 最接近原点的 K 个点
@@ -410,6 +448,13 @@ int main(int argc, const char * argv[]) {
     vector<int> res6 = sortArrayByParityII(nums6);
     for (auto item: res6) {
         cout << "sortArrayByParityII:" << item << endl;
+    }
+    
+    vector<int> nums7 = {2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19};
+    vector<int> nums8 = {2, 1, 4, 3, 9, 6};
+    vector<int> res7 = relativeSortArray(nums7, nums8);
+    for (auto item: res7) {
+        cout << "relativeSortArray:" << item << endl;
     }
     
     return 0;
