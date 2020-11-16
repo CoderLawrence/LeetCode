@@ -65,8 +65,9 @@ int main(int argc, const char * argv[]) {
     }
     
     cout << "--------- TTBSTree ------------------ " << endl;
+    TTBSTComparator<int> *comparator = new TTBSTDefaultComparator();
     //二叉搜索树
-    TTBSTree<int> BSTree;
+    TTBSTree<int> BSTree(comparator);
     BSTree.add(11);
     BSTree.add(5);
     BSTree.add(8);

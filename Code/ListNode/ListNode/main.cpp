@@ -415,10 +415,117 @@ ListNode* sortList(ListNode* head) {
     return result->next;
 }
 
+/*
+ 328. 奇偶链表
+ https://leetcode-cn.com/problems/odd-even-linked-list/
+ */
+ListNode* oddEvenList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+    
+    int index = 0;
+    ListNode *l1 = nullptr;
+    ListNode *l2 = nullptr;
+    ListNode *curr1 = nullptr;
+    ListNode *curr2 = nullptr;
+    while (head != nullptr) {
+        ListNode *temp = head->next;
+        if (index % 2 == 0) {
+            head->next = NULL;
+            if (l1 == nullptr) {
+                l1 = head;
+                curr1 = l1;
+            } else {
+                curr1->next = head;
+                curr1 = curr1->next;
+            }
+        } else {
+            head->next = NULL;
+            if (l2 == nullptr) {
+                l2 = head;
+                curr2 = l2;
+            } else {
+                curr2->next = head;
+                curr2 = curr2->next;
+            }
+        }
+        
+        head = temp;
+        index++;
+    }
+    
+    ListNode *res = new ListNode(-1);
+    ListNode *curr = res;
+    while (l1 != nullptr || l2 != nullptr) {
+        if (l1 != nullptr) {
+            curr->next = l1;
+            curr = curr->next;
+            l1 = l1->next;
+        } else {
+            curr->next = l2;
+            curr = curr->next;
+            l2 = l2->next;
+        }
+    }
+    
+    return res->next;
+}
+
+ListNode* oddEvenList2(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+    
+    int index = 0;
+    ListNode *even = nullptr;
+    ListNode *odd = nullptr;
+    ListNode *even_curr = nullptr;
+    ListNode *odd_curr = nullptr;
+    while (head != nullptr) {
+        ListNode *temp = head->next;
+        if (index % 2 == 0) {
+            head->next = NULL;
+            if (even == nullptr) {
+                even = head;
+                even_curr = even;
+            } else {
+                even_curr->next = head;
+                even_curr = even_curr->next;
+            }
+        } else {
+            head->next = NULL;
+            if (odd == nullptr) {
+                odd = head;
+                odd_curr = odd;
+            } else {
+                odd_curr->next = head;
+                odd_curr = odd_curr->next;
+            }
+        }
+        
+        head = temp;
+        index++;
+    }
+    
+    even_curr->next = odd;
+    return even;
+}
+
 union endian {
     char c;
     int i;
 }en;
+
+void isBigEndian() {
+    //判断是大端模式还是小端模式
+    en.i = 1;
+    if (en.c == 1) {
+        printf("little endian\n");
+    } else {
+        printf("big endian\n");
+    }
+}
 
 int main(int argc, const char * argv[]) {
     ListNode *head = new ListNode(1);
@@ -456,13 +563,9 @@ int main(int argc, const char * argv[]) {
     int total = sumNum.sumNumbers(root);
     cout << "sumNumber = " << total << endl;
     
-    //判断是大端模式还是小端模式
-    en.i = 1;
-    if (en.c == 1) {
-        printf("little endian\n");
-    } else {
-        printf("big endian\n");
-    }
+    vector<int> vecs2 = {1, 2, 3, 4, 5};
+    ListNode *list2 = listWithArray(vecs2);
+    ListNode *res1 = oddEvenList(list2);
 
     return 0;
 }

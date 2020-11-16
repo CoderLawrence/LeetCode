@@ -10,6 +10,19 @@
 
 #include "TTTreeNode.hpp"
 
+template <class T>
+class TTBSTComparator {
+public:
+    virtual int comparator(const T &e1, const T &e2) = 0;
+};
+
+class TTBSTDefaultComparator: public TTBSTComparator<int> {
+public:
+    int comparator(const int &e1, const int &e2) {
+        return e1 - e2;
+    }
+};
+
 /// 二叉搜索树，目前使用基本数类型作为实例
 /// 如果其他数据类型需要进行比较必须要重载运算符
 /// 二叉搜索树的特点：
@@ -32,12 +45,14 @@ private:
     /// @param e1 节点的值
     /// @param e2 节点的值
     int compare(const T &e1, const T &e2) const {
-        return e1 == e2 ? 0 : (e1 > e2 ? 1 : -1);
+        return m_comparator->comparator(e1, e2);
     }
 public:
-    TTBSTree() {
-        m_root = nullptr;
-    }
+    /// 比较器，支持自定义
+    TTBSTComparator<T> *m_comparator;
+    
+    TTBSTree(TTBSTComparator<T> *x):
+        m_comparator(x), m_root(nullptr) {}
     
     ~TTBSTree() {
         
