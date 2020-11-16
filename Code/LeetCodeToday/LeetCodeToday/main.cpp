@@ -316,6 +316,51 @@ vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
     return points;
 }
 
+/*
+ 406. 根据身高重建队列
+ https://leetcode-cn.com/problems/queue-reconstruction-by-height/
+ */
+vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+    // 身高从低到高排序
+    sort(people.begin(), people.end());
+    vector<vector<int>> res(people.size());
+    // 遍历people
+    for(auto & p : people){
+        int count = -1; // 计算空位置或高度等于p[0]的位置
+        for(int i = 0; i < res.size(); i++){
+            // 位置上和我一样高或者如果一个位置是空的
+            if(res[i].empty() || res[i][0] == p[0]) {
+                count++;
+            }
+            // 数到第k个位置
+            if(count == p[1]){
+                res[i] = p;
+                break;
+            }
+        }
+    }
+    
+    return res;
+}
+
+vector<vector<int>> reconstructQueue2(vector<vector<int>>& people) {
+    //身高降序排列，人数升序排列
+    sort(people.begin(), people.end(), [](const vector<int>& a, const vector<int>& b) {
+        if(a[0] > b[0])
+            return true;
+        if(a[0] == b[0] && a[1] <b[1])
+            return true;
+        return false;
+    });
+    
+    vector<vector<int>> res;
+    for(int i = 0; i < people.size(); i++) {
+        res.insert(res.begin() + people[i][1], people[i]);
+    }
+    
+    return res;
+}
+
 /************************************* 困难题 *********************************************/
 
 /*
@@ -455,6 +500,13 @@ int main(int argc, const char * argv[]) {
     vector<int> res7 = relativeSortArray(nums7, nums8);
     for (auto item: res7) {
         cout << "relativeSortArray:" << item << endl;
+    }
+    
+    cout << "---- reconstructQueue: ----" << endl;
+    vector<vector<int>> nums9 = {{7, 0}, {4, 4}, {7, 1}, {5, 0}, {6, 1}, {5,2}};
+    vector<vector<int>> res8 = reconstructQueue2(nums9);
+    for (vector<int> item: res8) {
+        cout << "["<< item.front() << ", " << item.back() << "]" << endl;
     }
     
     return 0;

@@ -36,8 +36,9 @@ private:
     int m_size;
     TTTreeNode<T> *m_root;
     void elementNotNullCheck(const T &element) {
-        if (element == NULL) {
-            throw "element was masut not null";
+        //代码执行没有问题，目前所学c++知识还不能理解这样处理是否正确，后续优化
+        if (element == is_null_pointer<T>()) {
+            throw invalid_argument("TTBSTree::add() element can't be null");
         }
     }
     
