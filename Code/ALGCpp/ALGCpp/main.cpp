@@ -76,6 +76,13 @@ int main(int argc, const char * argv[]) {
     BSTree.add(12);
     BSTree.add(13);
     BSTree.add(16);
+    //前序遍历
+    cout << "BSTree::inorderTraversal()" << endl;
+    BSTree.preorderTraversal();
+    cout << "BSTree::inorderTraversal()" << endl;
+    BSTree.inorderTraversal();
+    cout << "BSTree::postorderTraversal()" << endl;
+    BSTree.postorderTraversal();
     cout << BSTree.size() << endl;
     
     return 0;

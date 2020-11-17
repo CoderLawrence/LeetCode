@@ -48,12 +48,35 @@ private:
     int compare(const T &e1, const T &e2) const {
         return m_comparator->comparator(e1, e2);
     }
+    
+    /// 前序遍历，先访问左子树访问完成后再访问右子树
+    /// @param node 开始遍历子树的节点
+    void preorderTraversal(TTTreeNode<T> *node) {
+        if (node == nullptr) return;
+        cout << node->element << endl;
+        preorderTraversal(node->left);
+        preorderTraversal(node->right);
+    }
+    
+    void inorderTraversal(TTTreeNode<T> *node) {
+        if (node == nullptr) return;
+        inorderTraversal(node->left);
+        cout << node->element << endl;
+        inorderTraversal(node->right);
+    }
+    
+    void postorderTraversal(TTTreeNode<T> *node) {
+        if (node == nullptr) return;
+        postorderTraversal(node->left);
+        postorderTraversal(node->right);
+        cout << node->element << endl;
+    }
 public:
     /// 比较器，支持自定义
     TTBSTComparator<T> *m_comparator;
     
     TTBSTree(TTBSTComparator<T> *x):
-        m_comparator(x), m_root(nullptr) {}
+        m_comparator(x), m_root(nullptr), m_size(0) {}
     
     ~TTBSTree() {
         
@@ -93,7 +116,8 @@ public:
             } else if (cmp < 0) {
                 node = node->left;
             } else {
-                //如果是两个值相等则什么的都不干
+                //如果是两个值相等则更新为最新的值
+                node->element = element;
                 return;
             }
         }
@@ -114,6 +138,21 @@ public:
     
     bool contains(const T &element) {
         
+    }
+    
+    /// 前序遍历，先访问左子树访问完成后再访问右子树
+    void preorderTraversal() {
+        preorderTraversal(m_root);
+    }
+    
+    ///中序遍历，先访问左子树，再访问根节点，然后再访问右子树
+    void inorderTraversal() {
+        inorderTraversal(m_root);
+    }
+    
+    ///中序遍历，先访问左子树，再访问右子树，然后再访问根节点
+    void postorderTraversal() {
+        postorderTraversal(m_root);
     }
 };
 
