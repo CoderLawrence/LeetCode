@@ -15,6 +15,16 @@
 
 using namespace std;
 
+class Person: public TTBSTComparable<Person> {
+public:
+    int m_age;
+    int compareTo(const Person &e) {
+        return m_age - e.m_age;
+    }
+    
+    Person(int age):m_age(age) {}
+};
+
 int main(int argc, const char * argv[]) {
     
     cout << "--------- TTStack ------------------ " << endl;
@@ -65,10 +75,9 @@ int main(int argc, const char * argv[]) {
     }
     
     cout << "--------- TTBSTree ------------------ " << endl;
-    TTBSTComparator<int> *comparator = new TTBSTDefaultComparator();
     //二叉搜索树
-    TTBSTree<int> BSTree(comparator);
-    BSTree.add(11);
+    TTBSTree<int> BSTree;
+    BSTree.add(4);
     BSTree.add(5);
     BSTree.add(8);
     BSTree.add(6);
