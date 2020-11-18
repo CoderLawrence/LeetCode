@@ -63,7 +63,7 @@ private:
         return e1 - e2;
     }
     
-    /// 前序遍历，先访问左子树访问完成后再访问右子树
+    /// 前序遍历，遍历根节点，然后接着先访问左子树访问完成后再访问右子树
     /// @param node 开始遍历子树的节点
     void preorderTraversal(TTTreeNode<T> *node) {
         if (node == nullptr) return;
