@@ -10,6 +10,11 @@
 
 #include "TTTreeNode.hpp"
 
+#include <iostream>
+#include <deque>
+
+using namespace std;
+
 template <class T>
 class TTBSTComparator {
 public:
@@ -85,6 +90,8 @@ private:
         postorderTraversal(node->right);
         cout << node->element << endl;
     }
+    
+    void levelOrderTraversal(TTTreeNode<T> *node);
 public:
     TTBSTree(TTBSTComparator<T> *x):
         m_comparator(x), m_root(nullptr), m_size(0) {}
@@ -167,6 +174,37 @@ public:
     void postorderTraversal() {
         postorderTraversal(m_root);
     }
+    
+    /*
+     层次遍历
+     基本思路：
+     1、先把节点入栈
+     2、然后取出节点，判断是否有左子树，如果有入栈
+     3、然后判断是否有友子树，如果有入栈
+     4、一直循环直到栈为空
+     */
+    void levelOrderTraversal() {
+        levelOrderTraversal(m_root);
+    }
 };
+
+template<class T>
+void TTBSTree<T>::levelOrderTraversal(TTTreeNode<T> *node) {
+    if (node == nullptr) return;
+    deque<TTTreeNode<T> *> node_queue;
+    node_queue.push_front(node);
+    while (!node_queue.empty()) {
+        TTTreeNode<T> *ele = node_queue.front();
+        cout << ele->element << endl;
+        node_queue.pop_front();
+        if (ele->left != nullptr) {
+            node_queue.push_back(ele->left);
+        }
+
+        if (ele->right != nullptr) {
+            node_queue.push_back(ele->right);
+        }
+    }
+}
 
 #endif /* TTBSTree_hpp */

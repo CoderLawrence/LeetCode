@@ -88,10 +88,16 @@ int main(int argc, const char * argv[]) {
     //前序遍历
     cout << "BSTree::inorderTraversal()" << endl;
     BSTree.preorderTraversal();
+    //中序遍历
     cout << "BSTree::inorderTraversal()" << endl;
     BSTree.inorderTraversal();
+    //后序遍历
     cout << "BSTree::postorderTraversal()" << endl;
     BSTree.postorderTraversal();
+    //层次遍历
+    cout << "BSTree::levelOrderTraversal()" << endl;
+    BSTree.levelOrderTraversal();
+    //获取树的大小
     cout << BSTree.size() << endl;
     
     return 0;
