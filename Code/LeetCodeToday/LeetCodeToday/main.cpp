@@ -301,6 +301,25 @@ vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
     return res;
 }
 
+/*
+ 283. 移动零
+ https://leetcode-cn.com/problems/move-zeroes/
+ */
+void moveZeroes(vector<int>& nums) {
+    int size = (int)nums.size();
+    int count = 0;
+    for (int i = 0; i < size; i++) {
+        if (nums[i]) {
+            nums[count] = nums[i];
+            count++;
+        }
+    }
+    
+    for (int j = count; j < size; j++) {
+        nums[j] = 0;
+    }
+}
+
 /************************************* 中等难度 *******************************************/
 /*
  973. 最接近原点的 K 个点
@@ -508,6 +527,10 @@ int main(int argc, const char * argv[]) {
     for (vector<int> item: res8) {
         cout << "["<< item.front() << ", " << item.back() << "]" << endl;
     }
+    
+    cout << "moveZeroes" << endl;
+    vector<int> nums10 = {0, 1, 0, 3, 12};
+    moveZeroes(nums10);
     
     return 0;
 }
