@@ -328,6 +328,22 @@ void moveZeroes(vector<int>& nums) {
     }
 }
 
+/*
+ 242. 有效的字母异位词
+ 解题思路：排序，判断字符是否相等
+ https://leetcode-cn.com/problems/valid-anagram/
+ */
+bool isAnagram(string s, string t) {
+    if (s.length() != t.length()) {
+        return false;
+    }
+    
+    sort(s.begin(), s.end());
+    sort(t.begin(), t.end());
+    
+    return s == t;
+}
+
 /************************************* 中等难度 *******************************************/
 /*
  973. 最接近原点的 K 个点
@@ -379,6 +395,7 @@ vector<vector<int>> reconstructQueue2(vector<vector<int>>& people) {
             return true;
         return false;
     });
+    
     
     vector<vector<int>> res;
     for(int i = 0; i < people.size(); i++) {

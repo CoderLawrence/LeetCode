@@ -15,6 +15,7 @@
 
 using namespace std;
 
+///比较器
 template <class T>
 class TTBSTComparator {
 public:
@@ -35,6 +36,12 @@ public:
     }
 };
 
+/*
+ 目前存在的问题：
+ 树开始遍历就不能停止，需要重构为写入访问器的方式，
+ 目前还不掌握怎么写后续补上，持续学习C++知识
+ */
+
 /// 二叉搜索树，目前使用基本数类型作为实例
 /// 如果其他数据类型需要进行比较必须要重载运算符
 /// 二叉搜索树的特点：
@@ -52,6 +59,7 @@ private:
     
     void elementNotNullCheck(const T &element) {
         //代码执行没有问题，目前所学c++知识还不能理解这样处理是否正确，后续优化
+        //有问题如果是对象类型的话会奔溃
         if (element == is_null_pointer<T>()) {
             throw invalid_argument("TTBSTree::add() element can't be null");
         }
@@ -66,6 +74,24 @@ private:
         }
         
         return e1 - e2;
+    }
+    
+    /// 获取节点
+    TTTreeNode<T> *node(const T element) {
+        elementNotNullCheck(element);
+        TTTreeNode<T> *node = m_root;
+        while (node != nullptr) {
+            int cmp = compare(node->element, element);
+            if (cmp == 0) {
+                return node;
+            } else if (cmp > 0) {
+                node = node->right;
+            } else {
+                node = node->left;
+            }
+        }
+        
+        return node;
     }
     
     /// 前序遍历，遍历根节点，然后接着先访问左子树访问完成后再访问右子树
@@ -91,7 +117,31 @@ private:
         cout << node->element << endl;
     }
     
-    void levelOrderTraversal(TTTreeNode<T> *node);
+    /*
+     层次遍历
+     基本思路：
+     1、先把节点入栈
+     2、然后取出节点，判断是否有左子树，如果有入栈
+     3、然后判断是否有友子树，如果有入栈
+     4、一直循环直到栈为空
+     */
+    void levelOrderTraversal(TTTreeNode<T> *node) {
+        if (node == nullptr) return;
+        deque<TTTreeNode<T> *> node_queue;
+        node_queue.push_front(node);
+        while (!node_queue.empty()) {
+            TTTreeNode<T> *ele = node_queue.front();
+            cout << ele->element << endl;
+            node_queue.pop_front();
+            if (ele->left != nullptr) {
+                node_queue.push_back(ele->left);
+            }
+
+            if (ele->right != nullptr) {
+                node_queue.push_back(ele->right);
+            }
+        }
+    }
 public:
     TTBSTree(TTBSTComparator<T> *x):
         m_comparator(x), m_root(nullptr), m_size(0) {}
@@ -160,6 +210,7 @@ public:
         
     }
     
+    //MARK: ------------- 二叉搜索树树的遍历 ------------------------------------
     /// 前序遍历，先访问左子树访问完成后再访问右子树
     void preorderTraversal() {
         preorderTraversal(m_root);
@@ -290,24 +341,5 @@ public:
         return true;
     }
 };
-
-template<class T>
-void TTBSTree<T>::levelOrderTraversal(TTTreeNode<T> *node) {
-    if (node == nullptr) return;
-    deque<TTTreeNode<T> *> node_queue;
-    node_queue.push_front(node);
-    while (!node_queue.empty()) {
-        TTTreeNode<T> *ele = node_queue.front();
-        cout << ele->element << endl;
-        node_queue.pop_front();
-        if (ele->left != nullptr) {
-            node_queue.push_back(ele->left);
-        }
-
-        if (ele->right != nullptr) {
-            node_queue.push_back(ele->right);
-        }
-    }
-}
 
 #endif /* TTBSTree_hpp */
