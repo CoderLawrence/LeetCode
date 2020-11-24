@@ -99,6 +99,10 @@ int main(int argc, const char * argv[]) {
     BSTree.levelOrderTraversal();
     //获取树的大小
     cout << BSTree.size() << endl;
+    //获取树的高度
+    cout << "BSTree::height()" << BSTree.height() << endl;
+    //判断树是否为完全二叉树
+    cout << "BSTree::isComplete()" << BSTree.isComplete() << endl;
     
     return 0;
 }

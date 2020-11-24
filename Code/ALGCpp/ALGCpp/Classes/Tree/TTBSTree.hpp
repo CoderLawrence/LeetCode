@@ -186,6 +186,109 @@ public:
     void levelOrderTraversal() {
         levelOrderTraversal(m_root);
     }
+    
+    /*
+     获取树的高度，使用层次遍历
+     */
+    int height() {
+        if (m_root == nullptr) return 0;
+        deque<TTTreeNode<T> *> queue;
+        queue.push_back(m_root);
+        
+        int height = 0;
+        int levelSize = 1;
+        while (!queue.empty()) {
+            TTTreeNode<T> *node = queue.front();
+            queue.pop_front();
+            levelSize--;
+            if (node->left != nullptr) {
+                queue.push_back(node->left);
+            }
+            
+            if (node->right != nullptr) {
+                queue.push_back(node->right);
+            }
+            
+            //如果levelSize为零，那么说明这一层已经遍历完成
+            if (levelSize == 0) {
+                levelSize = (int)queue.size();
+                height++;
+            }
+        }
+        
+        return height;
+    }
+    
+    /*
+     判断是否为完全二叉树
+     */
+    bool isComplete2() {
+        //1、完全二叉树，如果左子节点为空，右子节点不为空，那么不是完全二叉树，
+        //因为在完全二叉树中，如果只有一个叶子节点，那么必须为左子节点
+        //2、如果一个节点它的节点的度不为2那么接下来的所有子节点都是叶子节点
+        if (m_root == nullptr) return false;
+        deque<TTTreeNode<T> *> queue;
+        queue.push_back(m_root);
+        bool isLeaf = false;
+        while (!queue.empty()) {
+            TTTreeNode<T> *node = queue.front();
+            queue.pop_front();
+            //如果是叶子节点，那么只存在一个子节点，而且必须是左子节点
+            if (isLeaf && !(node->left == nullptr && node->right != nullptr)) {
+                return false;
+            }
+            
+            if (node->left != nullptr && node->right != nullptr) {
+                queue.push_back(node->left);
+                queue.push_back(node->right);
+            } else if (node->left == nullptr && node->right != nullptr) { //判断是否只有左子节点
+                return false;
+            } else { //是叶子节点
+                isLeaf = true;
+                if (node->left != nullptr) {
+                    queue.push_back(node->left);
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    bool isComplete() {
+        //1、完全二叉树，如果左子节点为空，右子节点不为空，那么不是完全二叉树，
+        //因为在完全二叉树中，如果只有一个叶子节点，那么必须为左子节点
+        //2、如果一个节点它的节点的度不为2那么接下来的所有子节点都是叶子节点
+        if (m_root == nullptr) return false;
+        deque<TTTreeNode<T> *> queue;
+        queue.push_back(m_root);
+        bool isLeaf = false;
+        while (!queue.empty()) {
+            TTTreeNode<T> *node = queue.front();
+            queue.pop_front();
+            //如果是叶子节点，那么只存在一个子节点，而且必须是左子节点
+            if (isLeaf && !(node->left == nullptr && node->right != nullptr)) {
+                return false;
+            }
+            
+            //判断是否只有左子节点
+            if (node->left != nullptr) {
+                queue.push_back(node->left);
+            } else if (node->right != nullptr) {
+                return false;
+            }
+            
+            if (node->right){
+                queue.push_back(node->right);
+            } else {
+                //说明往下开始后面的子节点都是叶子节点
+                // node->right == null
+                // node->left != null && node->right == null
+                isLeaf = true;
+            }
+        }
+        
+        return true;
+    }
 };
 
 template<class T>
