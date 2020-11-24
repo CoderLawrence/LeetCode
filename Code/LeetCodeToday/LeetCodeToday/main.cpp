@@ -12,6 +12,7 @@
 #include <set>
 #include <map>
 #include <stack>
+#include <deque>
 
 using namespace std;
 
@@ -385,6 +386,37 @@ vector<vector<int>> reconstructQueue2(vector<vector<int>>& people) {
     }
     
     return res;
+}
+
+/*
+ 222. 完全二叉树的节点个数
+ 解题思路：利用队列进行层次遍历
+ https://leetcode-cn.com/problems/count-complete-tree-nodes/
+ */
+int countNodes(TreeNode* root) {
+    if (root == nullptr) return 0;
+    int count = 0;
+    deque<TreeNode *> queue;
+    queue.push_back(root);
+    while (!queue.empty()) {
+        TreeNode *node = queue.front();
+        queue.pop_front();
+        count++;
+        if (node->left != nullptr) {
+            queue.push_back(node->left);
+        }
+        
+        if (node->right != nullptr) {
+            queue.push_back(node->right);
+        }
+    }
+    
+    return count;
+}
+
+int countNodes2(TreeNode* root) {
+    if (root == nullptr) return 0;
+    return 1 + countNodes2(root->left) + countNodes2(root->right);
 }
 
 /************************************* 困难题 *********************************************/
