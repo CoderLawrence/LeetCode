@@ -512,6 +512,63 @@ ListNode* oddEvenList2(ListNode* head) {
     return even;
 }
 
+/*
+ 147. 对链表进行插入排序
+ https://leetcode-cn.com/problems/insertion-sort-list/
+ */
+ListNode* insertionSortList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+    
+    ListNode *p = nullptr;
+    ListNode *q = nullptr;
+    for (p = head; p != nullptr; p = p->next) {
+        for (q = head; q->next != nullptr; q = q->next) {
+            if (q->val > q->next->val) {
+                int temp = q->val;
+                q->val = q->next->val;
+                q->next->val = temp;
+            }
+        }
+    }
+    
+    return head;
+}
+
+ListNode* insertionSortList2(ListNode* head) {
+    if(head == nullptr || head->next == nullptr) {
+        return head;
+    }
+        
+    ListNode *newhead = new ListNode(0);
+    newhead->next = head;
+    
+    ListNode *pre = newhead;    //插入位置的前一个结点
+    ListNode *cur = head;       //当前要插入的结点
+    ListNode *p = newhead, *q = cur;    //p、q分别表示当前结点cur的前、后结点
+    while(cur != nullptr) {
+        q = cur->next;
+        pre = newhead;
+        while(pre->next != nullptr && pre->next->val < cur->val) {   //找到插入位置
+            pre = pre->next;
+        }
+        
+        if(pre->next == cur) {
+            p = p->next;
+        } else {
+            cur->next = pre->next;
+            pre->next = cur;
+            p->next = q;
+        }
+        
+        cur = q;
+    }
+    
+    return newhead->next;
+}
+
+/** 判断CPU的大小端 */
 union endian {
     char c;
     int i;
@@ -566,6 +623,15 @@ int main(int argc, const char * argv[]) {
     vector<int> vecs2 = {1, 2, 3, 4, 5};
     ListNode *list2 = listWithArray(vecs2);
     ListNode *res1 = oddEvenList(list2);
+    
+    cout << "insertionSortList" << endl;
+    vector<int> vecs3 = {4, 2, 1, 5, 3};
+    ListNode *list3 = listWithArray(vecs3);
+    ListNode *res2 = insertionSortList2(list3);
+    while (res2 != nullptr) {
+        cout << res2->val << endl;
+        res2 = res2->next;
+    }
 
     return 0;
 }
