@@ -13,6 +13,7 @@
 #include <map>
 #include <stack>
 #include <deque>
+#include <string>
 
 using namespace std;
 
@@ -344,6 +345,77 @@ bool isAnagram(string s, string t) {
     return s == t;
 }
 
+/*
+ 1370. 上升下降字符串
+ 解题思路：桶排序
+ https://leetcode-cn.com/problems/increasing-decreasing-string/
+ */
+string sortString(string s) {
+    //记录字符出现的次数，26个字母
+    vector<int> sVec(26);
+    for (char &c: s) {
+        sVec[c - 'a']++;
+    }
+    
+    string res;
+    while (res.length() < s.length()) {
+        //步骤1，2，3
+        for (int i = 0; i < 26; i++) {
+            if (sVec[i]) {
+                res.push_back(i + 'a');
+                sVec[i]--;
+            }
+        }
+        //步骤五
+        for (int i = 25; i >= 0; i--) {
+            if (sVec[i]) {
+                res.push_back(i + 'a');
+                sVec[i]--;
+            }
+        }
+    }
+    
+    return res;
+}
+
+string sortString2(string s) {
+    sort(s.begin(), s.end());
+    string res;
+    while (s.length()) {
+        //1，2，3步骤
+        for ( string::iterator it = s.begin(); it < s.end(); it++) {
+            char last_c = res[res.length() - 1];
+            if (*it > last_c  || res.length() == 0) {
+                res += *it;
+                s.erase(it);
+                it--;
+            }
+        }
+        
+        //步骤4
+        //排序后的字符串，最后一个就是最大值
+        res += s[s.length() - 1];
+        s.pop_back();
+        //倒序遍历
+        for (string::iterator it = s.end() - 1; it > s.begin(); it--) {
+            char last_c = res[res.length() - 1];
+            if (*it < last_c) {
+                res += *it;
+                s.erase(it);
+                it--;
+            }
+        }
+        
+        //又是一轮从小到大，先提取第一个最小字符
+        if (s.length()) {
+            res += s[0];
+            s.erase(s.begin());
+        }
+    }
+    
+    return res;
+}
+
 /************************************* 中等难度 *******************************************/
 /*
  973. 最接近原点的 K 个点
@@ -587,6 +659,8 @@ int main(int argc, const char * argv[]) {
     cout << "moveZeroes" << endl;
     vector<int> nums10 = {0, 1, 0, 3, 12};
     moveZeroes(nums10);
+    
+    cout << sortString2("spo") << endl;
     
     return 0;
 }
