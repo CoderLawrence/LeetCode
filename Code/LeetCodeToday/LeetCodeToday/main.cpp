@@ -508,6 +508,55 @@ int countNodes2(TreeNode* root) {
     return 1 + countNodes2(root->left) + countNodes2(root->right);
 }
 
+/*
+ 98. 验证二叉搜索树
+ 解题思路：二叉搜索树的中序遍历是升序的，
+        所以利用升序的性质判断后一个节点的值是否大于前一个节点的值
+ 题目陷阱：不能单纯比较节点的左节点和有节点的值的大小，同时还需注意节点的值与根节点的值的比较
+ 二叉搜索树的性质：右子树的值必须大于根节点的的值，左子树的值必须小于根节点的值
+ */
+bool isValidBST(TreeNode* root) {
+    stack<TreeNode*> stack;
+    long long inorder = (long long)INT_MIN - 1;
+    while (!stack.empty() || root != nullptr) {
+        while (root != nullptr) {
+            stack.push(root);
+            root = root -> left;
+        }
+        root = stack.top();
+        stack.pop();
+        // 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树
+        if (root -> val <= inorder) {
+            return false;
+        }
+        inorder = root -> val;
+        root = root -> right;
+    }
+    return true;
+}
+
+//使用中旬遍历+二叉树搜索树中序遍历是升序的特性
+class TTisValidBST {
+private:
+    vector<int> vec;
+    void traversal(TreeNode* root) {
+        if (root == NULL) return;
+        traversal(root->left);
+        vec.push_back(root->val); // 将二叉搜索树转换为有序数组
+        traversal(root->right);
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        vec.clear(); // 不加这句在leetcode上也可以过，但最好加上
+        traversal(root);
+        for (int i = 1; i < vec.size(); i++) {
+            // 注意要小于等于，搜索树里不能有相同元素
+            if (vec[i] <= vec[i - 1]) return false;
+        }
+        return true;
+    }
+};
+
 /************************************* 困难题 *********************************************/
 
 /*
