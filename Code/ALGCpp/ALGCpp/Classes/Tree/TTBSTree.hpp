@@ -169,6 +169,27 @@ private:
         
         return node->parent;
     }
+    
+    TTTreeNode<T> *successor(TTTreeNode<T> *node) {
+        //如果节点为空那么没有后继节点
+        if (node == nullptr) return nullptr;
+        //往右边找一直知道节点的左子节点知道节点的左子节点为空为止
+        TTTreeNode<T> *p = node->right;
+        if (p != nullptr) {
+            while (p != nullptr) {
+                p = p->left;
+            }
+            
+            return p;
+        }
+        
+        //如果不存在左子节点，那么往上找
+        while (node->parent != nullptr && node != node->parent->right) {
+            node = node->parent;
+        }
+        
+        return node->parent;
+    }
 public:
     TTBSTree(TTBSTComparator<T> *x):
         m_comparator(x), m_root(nullptr), m_size(0) {}
