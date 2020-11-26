@@ -94,6 +94,7 @@ private:
         return node;
     }
     
+    //MARK: - 树的遍历
     /// 前序遍历，遍历根节点，然后接着先访问左子树访问完成后再访问右子树
     /// @param node 开始遍历子树的节点
     void preorderTraversal(TTTreeNode<T> *node) {
@@ -141,6 +142,32 @@ private:
                 node_queue.push_back(ele->right);
             }
         }
+    }
+    
+//MARK: - 前驱节点&&后驱节点
+    /*
+     遍历方式：使用中序遍历方式的树
+     前驱节点：中序遍历时的前一个节点
+     如果是二叉搜索树，前驱节点就是钱一个比它小的节点，这里使用中序遍历方式
+     */
+    TTTreeNode<T> *predecessor(TTTreeNode<T> *node) {
+        if (node == nullptr) return nullptr;
+        //前驱节点在左子树当中(left->right->right....)
+        TTTreeNode<T> *p = node->left;
+        if (p != nullptr) {
+            while (p->right != nullptr) {
+                p = p->right;
+            }
+            
+            return p;
+        }
+        
+        //从父节点、祖父节点中查找前驱节点
+        while (node->parent != nullptr && node == node->parent->left) {
+            node = node->parent;
+        }
+        
+        return node->parent;
     }
 public:
     TTBSTree(TTBSTComparator<T> *x):
@@ -270,6 +297,7 @@ public:
         return height;
     }
     
+    //MARK: - 判断是否为完全二叉树
     /*
      判断是否为完全二叉树
      */
