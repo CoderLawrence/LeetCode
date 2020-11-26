@@ -666,6 +666,25 @@ int countRangeSum(vector<int>& nums, int lower, int upper) {
     return countRangeSumRecursive(sum, lower, upper, 0, sum.size() - 1);
 }
 
+/*
+ 164. 最大间距
+ https://leetcode-cn.com/problems/maximum-gap/
+ */
+int maximumGap(vector<int>& nums) {
+    int size = (int)nums.size();
+    if (size < 2) return 0;
+    sort(nums.begin(), nums.end());
+    int result = 0;
+    for (int i = 0; i < size - 1; i++) {
+        int num = nums[i + 1] - nums[i];
+        if (num > result) {
+            result = num;
+        }
+    }
+    
+    return result;
+}
+
 int main(int argc, const char * argv[]) {
     vector<int> nums1 = {1, 2, 2, 1};
     vector<int> nums2 = {2, 2};
@@ -710,6 +729,9 @@ int main(int argc, const char * argv[]) {
     moveZeroes(nums10);
     
     cout << sortString2("spo") << endl;
+    
+    vector<int> nums11 = {1, 3, 6, 9};
+    cout << "maximumGap:" << maximumGap(nums11) << endl;
     
     return 0;
 }
