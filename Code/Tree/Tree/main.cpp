@@ -129,6 +129,40 @@ vector<int> inorderTraversal(TreeNode* root) {
     return vec;
 }
 
+/*
+ 102. 二叉树的层序遍历
+ 解题思路：层次遍历，然后记录每一层的元素，遍历完一层后把数据那一层数据清除
+ https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
+ */
+vector<vector<int>> levelOrder(TreeNode* root) {
+    if (root == nullptr) return {};
+    int level = 1;
+    vector<vector<int>> res;
+    deque<TreeNode *> queue;
+    queue.push_back(root);
+    vector<int> levelVecs;
+    while (!queue.empty()) {
+        TreeNode *node = queue.front();
+        levelVecs.push_back(node->val);
+        queue.pop_front();
+        level--;
+        if (node->left != nullptr) {
+            queue.push_back(node->left);
+        }
+        
+        if (node->right != nullptr) {
+            queue.push_back(node->right);
+        }
+        
+        if (level == 0) {
+            res.push_back(levelVecs);
+            levelVecs.clear();
+        }
+    }
+    
+    return res;
+}
+
 int main(int argc, const char * argv[]) {
     return 0;
 }
