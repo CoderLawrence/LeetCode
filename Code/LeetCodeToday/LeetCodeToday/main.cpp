@@ -416,6 +416,22 @@ string sortString2(string s) {
     return res;
 }
 
+/*
+ 976. 三角形的最大周长
+ https://leetcode-cn.com/problems/largest-perimeter-triangle/
+ */
+int largestPerimeter(vector<int>& A) {
+    int size = (int)A.size();
+    if (size < 3) return 0;
+    sort(A.begin(), A.end());
+    for (int i = size - 1; i >= 2; i--) {
+        if (A[i - 1] + A[i - 2] > A[i])
+            return  A[i] + A[i - 1] + A[i - 2];
+    }
+    
+    return 0;
+}
+
 /************************************* 中等难度 *******************************************/
 /*
  973. 最接近原点的 K 个点
