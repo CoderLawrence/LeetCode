@@ -146,6 +146,7 @@ private:
     
 //MARK: - 前驱节点&&后驱节点
     /*
+     查找某一个节点的前驱节点
      遍历方式：使用中序遍历方式的树
      前驱节点：中序遍历时的前一个节点
      如果是二叉搜索树，前驱节点就是钱一个比它小的节点，这里使用中序遍历方式
@@ -163,13 +164,16 @@ private:
         }
         
         //从父节点、祖父节点中查找前驱节点
-        while (node->parent != nullptr && node == node->parent->left) {
+        while (node->parent != nullptr && node != node->parent->left) {
             node = node->parent;
         }
         
         return node->parent;
     }
     
+    /*
+     查找某一个节点的后继节点
+     */
     TTTreeNode<T> *successor(TTTreeNode<T> *node) {
         //如果节点为空那么没有后继节点
         if (node == nullptr) return nullptr;
@@ -189,6 +193,43 @@ private:
         }
         
         return node->parent;
+    }
+    
+    void removeNode(TTTreeNode<T> *node) {
+        if (node == nullptr) return;
+        m_size--;
+        if (node->left != nullptr &&
+            node->right != nullptr) { //度为2的节点
+            //找到后继节点
+            TTTreeNode<T> *s = successor(node);
+            //用后继节点的值覆盖度为2的节点的值
+            s->element = node->element;
+            //删除后继节点
+            node = s;
+        }
+        
+        //删除node节点（node的度必然是1或0）
+        TTTreeNode<T> *replacement = node->left != nullptr ? node->left : node->right;
+        if (replacement != nullptr) { //node是度为1的节点
+            //更改parent
+            replacement->parent = node->parent;
+            //更改parent的left、right的指向
+            if (node->parent == nullptr) { //node是度为1的节点并且是根节点
+                m_root = replacement;
+            } else if (node == node->parent->left) {
+                node->parent->left = replacement;
+            } else { //被删除的节点是删除节点的右节点
+                node->parent->right = replacement;
+            }
+        } else if (node->parent == nullptr) { //node是叶子节点并且是根节点
+            m_root == nullptr;
+        } else { //node是叶子节点，但不是根节点
+            if (node == node->parent->right) {
+                node->parent->right = nullptr;
+            } else {
+                node->parent->left = nullptr;
+            }
+        }
     }
 public:
     TTBSTree(TTBSTComparator<T> *x):
@@ -251,11 +292,13 @@ public:
     }
     
     void remove(const T &element) {
-        
+        //找到要删除的节点
+        TTTreeNode<T> *node = node(element);
+        removeNode(node);
     }
     
     bool contains(const T &element) {
-        
+        return node(element) != nullptr;
     }
     
     //MARK: ------------- 二叉搜索树树的遍历 ------------------------------------

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <deque>
 
 using namespace std;
 
@@ -161,6 +162,40 @@ vector<vector<int>> levelOrder(TreeNode* root) {
     }
     
     return res;
+}
+
+/*
+ 100. 相同的树
+ https://leetcode-cn.com/problems/same-tree/
+ */
+bool isSameTree(TreeNode *p, TreeNode *q) {
+    if (p == nullptr && q == nullptr) return true;
+    if (p == nullptr || q == nullptr) return false;
+    deque<TreeNode *> queue;
+    queue.push_back(p);
+    queue.push_back(q);
+    while (!queue.empty()) {
+        TreeNode *node_p = queue.front();
+        queue.pop_front();
+        TreeNode *node_q = queue.front();
+        queue.pop_front();
+        //如果两个节点为空，退出本次循环
+        if (node_p == nullptr && node_q == nullptr) continue;
+        //如果其中某一个节点为空，则两颗树不相同
+        if (node_p != nullptr && node_p == nullptr) return false;
+        if (node_p == nullptr && node_q != nullptr) return false;
+        //如果某一个节点的值不相等，则两颗树不相同
+        if (node_p->val != node_q->val) {
+            return false;
+        } else {
+            queue.push_back(node_p->left);
+            queue.push_back(node_q->left);
+            queue.push_back(node_p->right);
+            queue.push_back(node_q->right);
+        }
+    }
+    
+    return true;
 }
 
 int main(int argc, const char * argv[]) {
