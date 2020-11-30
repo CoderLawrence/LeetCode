@@ -77,11 +77,11 @@ private:
     }
     
     /// 获取节点
-    TTTreeNode<T> *node(const T element) {
+    TTTreeNode<T> *get_node(const T element) {
         elementNotNullCheck(element);
         TTTreeNode<T> *node = m_root;
         while (node != nullptr) {
-            int cmp = compare(node->element, element);
+            int cmp = compare(element, node->element);
             if (cmp == 0) {
                 return node;
             } else if (cmp > 0) {
@@ -198,8 +198,7 @@ private:
     void removeNode(TTTreeNode<T> *node) {
         if (node == nullptr) return;
         m_size--;
-        if (node->left != nullptr &&
-            node->right != nullptr) { //度为2的节点
+        if (node->left != nullptr && node->right != nullptr) { //度为2的节点
             //找到后继节点
             TTTreeNode<T> *s = successor(node);
             //用后继节点的值覆盖度为2的节点的值
@@ -222,7 +221,8 @@ private:
                 node->parent->right = replacement;
             }
         } else if (node->parent == nullptr) { //node是叶子节点并且是根节点
-            m_root == nullptr;
+            delete m_root;
+            m_root = nullptr;
         } else { //node是叶子节点，但不是根节点
             if (node == node->parent->right) {
                 node->parent->right = nullptr;
@@ -230,6 +230,9 @@ private:
                 node->parent->left = nullptr;
             }
         }
+        
+        //最后一步回收内存
+        delete node;
     }
 public:
     TTBSTree(TTBSTComparator<T> *x):
@@ -293,12 +296,12 @@ public:
     
     void remove(const T &element) {
         //找到要删除的节点
-        TTTreeNode<T> *node = node(element);
+        TTTreeNode<T> *node = get_node(element);
         removeNode(node);
     }
     
     bool contains(const T &element) {
-        return node(element) != nullptr;
+        return get_node(element) != nullptr;
     }
     
     //MARK: ------------- 二叉搜索树树的遍历 ------------------------------------

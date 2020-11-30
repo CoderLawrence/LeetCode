@@ -12,6 +12,7 @@
 #include "TTCircleQueue.hpp"
 
 #include "TTBSTree.hpp"
+#include "AVLTree.hpp"
 
 using namespace std;
 
@@ -103,6 +104,40 @@ int main(int argc, const char * argv[]) {
     cout << "BSTree::height()" << BSTree.height() << endl;
     //判断树是否为完全二叉树
     cout << "BSTree::isComplete()" << BSTree.isComplete() << endl;
+    
+    cout << "---------------------- AVLTree -------------------" << endl;
+    AVLTree<int> AVLTree;
+    AVLTree.add(4);
+    AVLTree.add(5);
+    AVLTree.add(8);
+    AVLTree.add(6);
+    AVLTree.add(1);
+    AVLTree.add(12);
+    AVLTree.add(13);
+    AVLTree.add(16);
+    //前序遍历
+    cout << "AVLTree::inorderTraversal()" << endl;
+    AVLTree.preorderTraversal();
+    //中序遍历
+    cout << "BSTree::inorderTraversal()" << endl;
+    AVLTree.inorderTraversal();
+    //后序遍历
+    cout << "AVLTree::postorderTraversal()" << endl;
+    AVLTree.postorderTraversal();
+    //层次遍历
+    cout << "AVLTree::levelOrderTraversal()" << endl;
+    AVLTree.levelOrderTraversal();
+    //获取树的大小
+    cout << AVLTree.size() << endl;
+    //获取树的高度
+    cout << "AVLTree::height()" << AVLTree.height() << endl;
+    //判断树是否为完全二叉树
+    cout << "AVLTree::isComplete()" << AVLTree.isComplete() << endl;
+    cout << "AVLTree::remove(5)" << endl;
+    AVLTree.remove(5);
+    //层次遍历
+    cout << "AVLTree::levelOrderTraversal()" << endl;
+    AVLTree.levelOrderTraversal();
     
     return 0;
 }
