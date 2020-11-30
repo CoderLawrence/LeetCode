@@ -15,8 +15,11 @@
 #include <deque>
 #include <string>
 
-using namespace std;
+/*
+ 坚持不懈， 每日一题，加油！！！
+ */
 
+using namespace std;
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -24,8 +27,7 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-/******************************* 坚持不懈， 每日一题 ***********************************/
-
+//MARK: - ------------- 简单题 ------------------------
 /*
  数组反转
  解题思路：前半部分与后半部分交换
@@ -432,7 +434,26 @@ int largestPerimeter(vector<int>& A) {
     return 0;
 }
 
-/************************************* 中等难度 *******************************************/
+/*
+ 剑指 Offer 03. 数组中重复的数字
+ https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/
+ */
+int findRepeatNumber(vector<int>& nums) {
+    unordered_map<int, int> map;
+    for (auto ele: nums) {
+        if (map.find(ele) != map.end()) {
+            return ele;
+        }
+        
+        map[ele]++;
+    }
+    
+    return -1;
+}
+
+
+
+//MARK: - ------------ 中等难度 ---------------------
 /*
  973. 最接近原点的 K 个点
  解题思路：直接抄答案
@@ -573,7 +594,7 @@ public:
     }
 };
 
-/************************************* 困难题 *********************************************/
+//MARK: - --------------- 困难题 -----------------
 
 /*
  127. 单词接龙
@@ -699,6 +720,33 @@ int maximumGap(vector<int>& nums) {
     }
     
     return result;
+}
+
+/*
+ 454. 四数相加 II
+ https://leetcode-cn.com/problems/4sum-ii/
+ */
+int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+    //求出A与B的所有情况，把a跟b的和出现的情况记录到map中，复杂度为O(n2)
+    unordered_map<int, int> map;
+    for (auto a: A) {
+        for (auto b: B) {
+            map[a + b]++;
+        }
+    }
+    
+    int count = 0;
+    for (auto c: C) {
+        for (auto d: D) {
+            // 判断c跟d的和的负值是否存在于sumMap中，存在的话则计数增加
+            int sum = c + d;
+            if (map[-sum]) {
+                count += map[-sum];
+            }
+        }
+    }
+    
+    return count;
 }
 
 int main(int argc, const char * argv[]) {

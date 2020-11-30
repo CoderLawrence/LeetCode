@@ -10,9 +10,51 @@
 #include <vector>
 #include <stack>
 #include <map>
+#include <deque>
 #include <unordered_map>
 
 using namespace std;
+
+class TTQueue {
+private:
+    int m_size;
+    stack<int> inStack;
+    stack<int> outStack;
+    void copyEleToOutStack() {
+        
+    }
+public:
+    TTQueue() {}
+    ~TTQueue() {}
+    int size() {
+        return m_size;
+    }
+    
+    void push(int element) {
+        inStack.push(element);
+        m_size++;
+    }
+    
+    int pop() {
+        int ele = top();
+        if (!empty()) {
+            outStack.pop();
+            m_size--;
+        }
+        
+        return ele;
+    }
+    
+    int top() {
+        copyEleToOutStack();
+        if (empty()) return -1;
+        return outStack.top();
+    }
+    
+    bool empty() {
+        return m_size == 0;
+    }
+};
 
 /*
  1081. 不同字符的最小子序列
