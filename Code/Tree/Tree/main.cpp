@@ -9,6 +9,7 @@
 #include <deque>
 #include <vector>
 #include <deque>
+#include <stack>
 
 using namespace std;
 
@@ -196,6 +197,38 @@ bool isSameTree(TreeNode *p, TreeNode *q) {
     }
     
     return true;
+}
+
+/*
+ 114. 二叉树展开为链表
+ 解题思路：利用栈前序迭代遍历二叉树，然后清空左子节点
+ https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/
+ */
+void flatten(TreeNode* root) {
+    if (root == nullptr) return;
+    TreeNode *last = nullptr;
+    stack<TreeNode *> st;
+    st.push(root);
+    while(!st.empty()) {
+        TreeNode *node = st.top();
+        st.pop();
+        
+        if(node->right != nullptr) {
+            st.push(node->right);
+        }
+        
+        if(node->left != nullptr) {
+            st.push(node->left);
+        }
+        
+        if (last == nullptr) {
+            last = root;
+        } else {
+            last->left = nullptr;
+            last->right = node;
+            last = node;
+        }
+    }
 }
 
 int main(int argc, const char * argv[]) {
