@@ -594,6 +594,46 @@ public:
     }
 };
 
+/*
+ 34. 在排序数组中查找元素的第一个和最后一个位置
+ https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+ */
+class TTSearchRange {
+private:
+    int binarySearch(vector<int> & nums, int target, bool flag) {
+        int res = -1;
+        int low = 0;
+        int high = (int)nums.size() - 1;
+        while (low <= high) {
+            int mid = (low + (high - low) / 2);
+            if (nums[mid] == target) {
+                res = mid;
+                if (flag) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            } else if (nums[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        
+        return res;
+    }
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int size = (int)nums.size();
+        if (size == 0) return {-1, -1};
+        if (size == 1 && nums[0] == target) return {0, 0};
+        vector<int> res = {-1, -1};
+        res[0] = binarySearch(nums, target, true);
+        res[1] = binarySearch(nums, target, false);
+        return res;
+    }
+};
+
 //MARK: - --------------- 困难题 -----------------
 
 /*
@@ -796,6 +836,11 @@ int main(int argc, const char * argv[]) {
     
     vector<int> nums11 = {1, 3, 6, 9};
     cout << "maximumGap:" << maximumGap(nums11) << endl;
+    
+    cout << "searchRange" << endl;
+    vector<int> nums12 = {1, 1, 2};
+    TTSearchRange searchRange;
+    searchRange.searchRange(nums12, 1);
     
     return 0;
 }
