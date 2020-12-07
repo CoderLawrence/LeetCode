@@ -568,21 +568,36 @@ ListNode* insertionSortList2(ListNode* head) {
     return newhead->next;
 }
 
-/** 判断CPU的大小端 */
-union endian {
-    char c;
-    int i;
-}en;
-
-void isBigEndian() {
-    //判断是大端模式还是小端模式
-    en.i = 1;
-    if (en.c == 1) {
-        printf("little endian\n");
-    } else {
-        printf("big endian\n");
+ListNode* reverseBetween(ListNode* head, int m, int n) {
+    if (head == nullptr) return head;
+    int len = 0;
+    ListNode *result = new ListNode(-1);
+    ListNode *curr = result;
+    ListNode *res_list = nullptr;
+    while (head != nullptr) {
+        if (len == n - 1) {
+            curr->next = res_list;
+        }
+        
+        if (len < m - 1) {
+            curr->next = new ListNode(head->val);
+            curr = curr->next;
+            head = head->next;
+        } else if (len >= n) {
+            head = head->next;
+        } else {
+            ListNode *temp = head->next;
+            head->next = res_list;
+            res_list = head;
+            head = temp;
+        }
+        
+        len++;
     }
+    
+    return result->next;
 }
+
 
 int main(int argc, const char * argv[]) {
     ListNode *head = new ListNode(1);
@@ -632,6 +647,10 @@ int main(int argc, const char * argv[]) {
         cout << res2->val << endl;
         res2 = res2->next;
     }
+    
+    vector<int> vecs4 = {1, 2, 3, 4, 5};
+    ListNode *list4 = listWithArray(vecs3);
+    reverseBetween(list4, 2, 4);
 
     return 0;
 }

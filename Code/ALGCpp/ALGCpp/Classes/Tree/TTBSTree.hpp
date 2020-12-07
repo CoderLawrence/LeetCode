@@ -262,6 +262,8 @@ public:
         if (m_root == nullptr) {
             m_root = new TTTreeNode<T>(element, nullptr);
             m_size++;
+            //新添加之后的处理
+            afterAdd(m_root);
             return;
         }
         
@@ -285,13 +287,11 @@ public:
         }
         
         //根据比较的值插入叶子节点
-        if (cmp > 0) {
-            parent->right = new TTTreeNode<T>(element, parent);
-        } else {
-            parent->left = new TTTreeNode<T>(element, parent);
-        }
-        
+        TTTreeNode<T> *newNode = new TTTreeNode<T>(element, parent);
+        cmp > 0 ? parent->right = newNode : parent->left = newNode;
         m_size++;
+        //新添加之后的处理
+        afterAdd(newNode);
     }
     
     void remove(const T &element) {
@@ -435,6 +435,9 @@ public:
         
         return true;
     }
+protected:
+    //虚继承，添加节点后再平衡二叉树
+    virtual void afterAdd(TTTreeNode<T> *root) {};
 };
 
 #endif /* TTBSTree_hpp */

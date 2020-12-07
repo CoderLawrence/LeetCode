@@ -16,7 +16,14 @@
  */
 template<class T>
 class AVLTree: public TTBSTree<T> {
-    
+protected:
+    void afterAdd(TTTreeNode<T> *root) {
+
+    }
+public:
+    //调用父类构造函数初始化
+    AVLTree():TTBSTree<T>(nullptr) {}
+    ~AVLTree() {};
 };
 
 #endif /* AVLTree_hpp */
