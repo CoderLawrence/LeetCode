@@ -260,7 +260,7 @@ public:
         elementNotNullCheck(element);
         //根节点为空
         if (m_root == nullptr) {
-            m_root = new TTTreeNode<T>(element, nullptr);
+            m_root = createNode(element, nullptr);
             m_size++;
             //新添加之后的处理
             afterAdd(m_root);
@@ -287,7 +287,7 @@ public:
         }
         
         //根据比较的值插入叶子节点
-        TTTreeNode<T> *newNode = new TTTreeNode<T>(element, parent);
+        TTTreeNode<T> *newNode = createNode(element, parent);
         cmp > 0 ? parent->right = newNode : parent->left = newNode;
         m_size++;
         //新添加之后的处理
@@ -437,7 +437,10 @@ public:
     }
 protected:
     //虚继承，添加节点后再平衡二叉树
-    virtual void afterAdd(TTTreeNode<T> *root) {};
+    virtual void afterAdd(TTTreeNode<T> *node) {};
+    virtual TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {
+        return new TTTreeNode<T>(element, parent);
+    }
 };
 
 #endif /* TTBSTree_hpp */
