@@ -229,8 +229,36 @@ void flatten(TreeNode* root) {
             last = node;
         }
     }
+    
+/*
+ 111. 二叉树的最小深度
+ https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/
+ */
+int minDepth(TreeNode* root) {
+    //如果根节点不存在，则树无高度
+    if(root == nullptr) return 0;
+    //如果叶子节点都为空，那么树的高度为1
+    if(root->left == nullptr && root->right == nullptr) return 1;
+    //获取最小路径值
+    return min(minDepth(root->left), minDepth(root->right)) + 1;
 }
 
 int main(int argc, const char * argv[]) {
+    TreeNode *root = new TreeNode(2);
+    
+    TreeNode *node_1 = new TreeNode(3);
+    root->right = node_1;
+    
+    TreeNode *node_2 = new TreeNode(4);
+    node_1->right = node_2;
+    
+    TreeNode *node_3 = new TreeNode(5);
+    node_2->right = node_3;
+    
+    TreeNode *node_4 = new TreeNode(6);
+    node_3->right = node_4;
+    
+    minDepth(root);
+    
     return 0;
 }
