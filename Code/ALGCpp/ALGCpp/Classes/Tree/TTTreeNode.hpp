@@ -22,8 +22,19 @@ public:
     TTTreeNode():TTTreeNode(NULL, NULL) {}
     TTTreeNode(const T &x, TTTreeNode<T> *parent):
         element(x), left(NULL), right(NULL), parent(parent) {}
-    void log() {
-        cout << "element->" << element << ", right->" << right << ", left->" << left << endl;
+    /// 是否为叶子节点
+    bool isLeaf() {
+        return this->left == nullptr && this->right == nullptr;
+    }
+    
+    ///是否为左子节点
+    bool isLeftChild() {
+        return this->parent != nullptr && this == this->parent->left;
+    }
+    
+    ///是否为右子节点
+    bool isRightChild() {
+        return this->parent != nullptr && this == this->parent->right;
     }
 };
 

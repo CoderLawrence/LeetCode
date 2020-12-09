@@ -14,7 +14,7 @@
 template<class T>
 class AVLTreeNode: public TTTreeNode<T> {
 public:
-    int m_height = 0;
+    int m_height = 1;
     AVLTreeNode():TTTreeNode<T>(NULL, NULL) {}
     AVLTreeNode(const T &x, TTTreeNode<T> *parent):TTTreeNode<T>(x, parent){}
     
@@ -22,6 +22,22 @@ public:
         int left_H = this->left == nullptr ? 0 : ((AVLTreeNode<T> *)this->left)->m_height;
         int right_H = this->right == nullptr ? 0 : ((AVLTreeNode<T> *)this->right)->m_height;
         return left_H - right_H;
+    }
+    
+    void updateHeight() {
+        int left_H = this->left == nullptr ? 0 : ((AVLTreeNode<T> *)this->left)->m_height;
+        int right_H = this->right == nullptr ? 0 : ((AVLTreeNode<T> *)this->right)->m_height;
+        m_height = max(left_H, right_H) + 1;
+    }
+    
+    //获取高度最高的节点
+    TTTreeNode<T> *tallerChild() {
+        int left_H = this->left == nullptr ? 0 : ((AVLTreeNode<T> *)this->left)->m_height;
+        int right_H = this->right == nullptr ? 0 : ((AVLTreeNode<T> *)this->right)->m_height;
+        if (left_H > right_H) return this->left;
+        if (left_H < right_H) return this->right;
+        //如果是高度相当，那么返回跟节点同方向的子节点
+        return this->isLeftChild() ? this->left : this->right;
     }
 };
 
@@ -33,16 +49,56 @@ template<class T>
 class AVLTree: public TTBSTree<T> {
 private:
     bool isBalanced(TTTreeNode<T> *node) {
+        //求绝对值
         return abs(((AVLTreeNode<T> *)node)->balanceFactor()) <= 1;
     }
+    
+    void updateHeight(TTTreeNode<T> *node) {
+        ((AVLTreeNode<T> *)node)->updateHeight();
+    }
+    
+    //恢复平衡，高度最低的不平衡节点
+    void rebalanceNode(TTTreeNode<T> *grand) {
+        TTTreeNode<T> *parent = ((AVLTreeNode<T> *)grand)->tallerChild();
+        TTTreeNode<T> *node = ((AVLTreeNode<T> *)parent)->tallerChild();
+        //如果父节点为左子树
+        if (parent->isLeftChild()) { //L
+            if (node->isLeftChild()) { //LL
+                
+            } else { //LR
+                
+            }
+        } else { //R
+            if (node->isLeftChild()) { //RL
+                
+            } else { //RR
+                
+            }
+        }
+    }
+    
+    //左旋转
+    void rotateLeft(TTTreeNode<T> *grand) {
+        
+    }
+    
+    //左旋转
+    void rotateRight(TTTreeNode<T> *grand) {
+        
+    }
+    
 protected:
     void afterAdd(TTTreeNode<T> *node) {
         while ((node = node->parent) != nullptr) {
             //判断是否平衡
             if (isBalanced(node)) {
-                
+                //如果已经是平衡则直接更新节点高度即可
+                updateHeight(node);
             } else {
-                
+                //再平衡，也就是第一个不平横的节点
+                rebalanceNode(node);
+                //只要找到第一个不平衡的节点让其恢复平衡，那么整棵树就恢复平衡
+                break;
             }
         }
     }
