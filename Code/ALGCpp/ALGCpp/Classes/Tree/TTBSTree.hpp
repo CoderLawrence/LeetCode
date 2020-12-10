@@ -441,6 +441,10 @@ protected:
     virtual TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {
         return new TTTreeNode<T>(element, parent);
     }
+    
+    void updateRoot(TTTreeNode<T> *node) {
+        m_root = node;
+    }
 };
 
 #endif /* TTBSTree_hpp */

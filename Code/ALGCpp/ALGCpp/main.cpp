@@ -133,8 +133,6 @@ int main(int argc, const char * argv[]) {
     cout << "AVLTree::height()" << AVLTree.height() << endl;
     //判断树是否为完全二叉树
     cout << "AVLTree::isComplete()" << AVLTree.isComplete() << endl;
-    cout << "AVLTree::remove(5)" << endl;
-    AVLTree.remove(5);
     //层次遍历
     cout << "AVLTree::levelOrderTraversal()" << endl;
     AVLTree.levelOrderTraversal();

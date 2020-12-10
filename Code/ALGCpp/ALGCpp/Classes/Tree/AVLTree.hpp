@@ -64,27 +64,73 @@ private:
         //如果父节点为左子树
         if (parent->isLeftChild()) { //L
             if (node->isLeftChild()) { //LL
-                
+                rotateRight(grand);
             } else { //LR
-                
+                rotateLeft(parent);
+                rotateRight(grand);
             }
         } else { //R
             if (node->isLeftChild()) { //RL
-                
+                rotateRight(parent);
+                rotateLeft(grand);
             } else { //RR
-                
+                rotateLeft(grand);
             }
         }
     }
     
     //左旋转
     void rotateLeft(TTTreeNode<T> *grand) {
+        TTTreeNode<T> *parent = grand->right;
+        TTTreeNode<T> *child = parent->left;
+        //有旋转
+        grand->right = parent->left;
+        parent->left = grand;
+        //更新父节点的子节点的指向
+        parent->parent = grand->parent;
+        if (grand->isLeftChild()) {
+            grand->parent->left = parent;
+        } else if (grand->isRightChild()) {
+            grand->parent->right = parent;
+        } else { //grand是root节点
+            TTBSTree<T>::updateRoot(parent);
+        }
         
+        if (child != nullptr) {
+            child->parent = grand;
+        }
+        
+        grand->parent = parent;
+        //更新高度
+        updateHeight(grand);
+        updateHeight(parent);
     }
     
-    //左旋转
+    //右旋转
     void rotateRight(TTTreeNode<T> *grand) {
+        TTTreeNode<T> *parent = grand->left;
+        TTTreeNode<T> *child = parent->right;
+        //有旋转
+        grand->left = child;
+        parent->right = grand;
+        //更新父节点的子节点的指向
+        parent->parent = grand->parent;
+        if (grand->isLeftChild()) {
+            grand->parent->left = parent;
+        } else if (grand->isRightChild()) {
+            grand->parent->right = parent;
+        } else {
+            TTBSTree<T>::updateRoot(parent);
+        }
         
+        if (child != nullptr) {
+            child->parent = grand;
+        }
+        
+        grand->parent = parent;
+        //更新高度
+        updateHeight(grand);
+        updateHeight(parent);
     }
     
 protected:
