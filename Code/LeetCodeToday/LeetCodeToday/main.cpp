@@ -451,7 +451,70 @@ int findRepeatNumber(vector<int>& nums) {
     return -1;
 }
 
+/*
+ 860. 柠檬水找零
+ https://leetcode-cn.com/problems/lemonade-change/
+ */
+bool lemonadeChange(vector<int>& bills) {
+    unordered_map<int, int> cash;
+    for (auto pay: bills) {
+        if (pay == 5) {
+            cash[pay]++;
+        } else {
+            if (pay == 10) {
+                if (cash[5] >= 1) {
+                    cash[5]--;
+                    cash[pay]++;
+                } else {
+                    return false;
+                }
+            } else if (pay == 20) {
+                if (cash[5] >= 1 && cash[10] >= 1) {
+                    cash[5]--;
+                    cash[10]--;
+                    cash[pay]++;
+                } else if (cash[5] >= 3) {
+                    cash[5] -= 3;
+                    cash[pay]++;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+    
+    return true;
+}
 
+bool lemonadeChange2(vector<int>& bills) {
+    int five_num = 0;
+    int ten_num = 0;
+    for (auto pay: bills) {
+        if (pay == 5) {
+            five_num++;
+        } else {
+            if (pay == 10) {
+                if (five_num >= 1) {
+                    five_num--;
+                    ten_num++;
+                } else {
+                    return false;
+                }
+            } else if (pay == 20) {
+                if (five_num >= 1 && ten_num >= 1) {
+                    five_num--;
+                    ten_num--;
+                } else if (five_num >= 3) {
+                    five_num -= 3;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+    
+    return true;
+}
 
 //MARK: - ------------ 中等难度 ---------------------
 /*
