@@ -10,6 +10,7 @@
 #include <vector>
 #include <deque>
 #include <stack>
+#include <unordered_map>
 
 using namespace std;
 
@@ -169,7 +170,24 @@ vector<vector<int>> levelOrder(TreeNode* root) {
  100. 相同的树
  https://leetcode-cn.com/problems/same-tree/
  */
-bool isSameTree(TreeNode *p, TreeNode *q) {
+bool isSameTree(TreeNode *s, TreeNode *t) {
+    //同时为空，说明树一起到底，两树相同
+    if (s== nullptr && t == nullptr) {
+        return true;
+    }
+    //说明有节点不为空，不是相同树
+    if (t == nullptr || s == nullptr) {
+        return false;
+    }
+    //如果节点的值不相同，不是相同树
+    if (s->val != t->val) {
+        return false;
+    }
+    
+    return isSameTree(s->left, t->left) && isSameTree(s->right, t->right);
+}
+
+bool isSameTree2(TreeNode *p, TreeNode *q) {
     if (p == nullptr && q == nullptr) return true;
     if (p == nullptr || q == nullptr) return false;
     deque<TreeNode *> queue;
@@ -229,7 +247,8 @@ void flatten(TreeNode* root) {
             last = node;
         }
     }
-    
+}
+
 /*
  111. 二叉树的最小深度
  https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/
@@ -243,22 +262,20 @@ int minDepth(TreeNode* root) {
     return min(minDepth(root->left), minDepth(root->right)) + 1;
 }
 
+/*
+ 572. 另一个树的子树
+ https://leetcode-cn.com/problems/subtree-of-another-tree/
+ */
+bool isSubtree(TreeNode* s, TreeNode* t) {
+    if (s == nullptr) return false;
+    if (t == nullptr) return true;
+    if (s->val == t->val && isSameTree(s, t)) {
+        return true;
+    }
+    
+    return isSubtree(s->left, t) || isSubtree(s->right, t);
+}
+
 int main(int argc, const char * argv[]) {
-    TreeNode *root = new TreeNode(2);
-    
-    TreeNode *node_1 = new TreeNode(3);
-    root->right = node_1;
-    
-    TreeNode *node_2 = new TreeNode(4);
-    node_1->right = node_2;
-    
-    TreeNode *node_3 = new TreeNode(5);
-    node_2->right = node_3;
-    
-    TreeNode *node_4 = new TreeNode(6);
-    node_3->right = node_4;
-    
-    minDepth(root);
-    
     return 0;
 }
