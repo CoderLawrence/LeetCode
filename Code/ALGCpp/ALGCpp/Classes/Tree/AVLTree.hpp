@@ -86,24 +86,8 @@ private:
         //有旋转
         grand->right = parent->left;
         parent->left = grand;
-        //更新父节点的子节点的指向
-        parent->parent = grand->parent;
-        if (grand->isLeftChild()) {
-            grand->parent->left = parent;
-        } else if (grand->isRightChild()) {
-            grand->parent->right = parent;
-        } else { //grand是root节点
-            TTBSTree<T>::updateRoot(parent);
-        }
-        
-        if (child != nullptr) {
-            child->parent = grand;
-        }
-        
-        grand->parent = parent;
-        //更新高度
-        updateHeight(grand);
-        updateHeight(parent);
+        //更新节点的父节点和高度
+        afterRotate(grand, parent, child);
     }
     
     //右旋转
@@ -113,6 +97,11 @@ private:
         //有旋转
         grand->left = child;
         parent->right = grand;
+        //更新节点的父节点和高度
+        afterRotate(grand, parent, child);
+    }
+    
+    void afterRotate(TTTreeNode<T> *grand, TTTreeNode<T> *parent, TTTreeNode<T> *child) {
         //更新父节点的子节点的指向
         parent->parent = grand->parent;
         if (grand->isLeftChild()) {
