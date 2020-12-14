@@ -697,6 +697,33 @@ public:
     }
 };
 
+/*
+ 49. 字母异位词分组
+ https://leetcode-cn.com/problems/group-anagrams/
+ */
+vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    unordered_map<string, vector<string>> map;
+    for (string str: strs) {
+        string ele = str;
+        sort(ele.begin(), ele.end());
+        if (map.count(ele)) {
+            vector<string> vecs = map[ele];
+            vecs.push_back(str);
+            map[ele] = vecs;
+        } else {
+            vector<string> vecs = {str};
+            map[ele] = vecs;
+        }
+    }
+    
+    vector<vector<string>> res_strs;
+    for (auto ele = map.begin(); ele != map.end(); ele++) {
+        res_strs.push_back(ele->second);
+    }
+    
+    return res_strs;
+}
+
 //MARK: - --------------- 困难题 -----------------
 
 /*
@@ -904,6 +931,10 @@ int main(int argc, const char * argv[]) {
     vector<int> nums12 = {1, 1, 2};
     TTSearchRange searchRange;
     searchRange.searchRange(nums12, 1);
+    
+    cout << "groupAnagrams" << endl;
+    vector<string> nums13 = {"eat","tea","tan","ate","nat","bat"};
+    groupAnagrams(nums13);
     
     return 0;
 }
