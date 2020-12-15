@@ -138,6 +138,19 @@ protected:
         }
     }
     
+    void afterRemove(TTTreeNode<T> *node) {
+        while ((node = node->parent) != nullptr) {
+            //判断是否平衡
+            if (isBalanced(node)) {
+                //如果已经是平衡则直接更新节点高度即可
+                updateHeight(node);
+            } else {
+                //再平衡，也就是第一个不平横的节点
+                rebalanceNode(node);
+            }
+        }
+    }
+    
     TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {
         return new AVLTreeNode<T>(element, parent);
     }

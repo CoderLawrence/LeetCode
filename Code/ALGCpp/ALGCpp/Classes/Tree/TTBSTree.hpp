@@ -180,7 +180,7 @@ private:
         //往右边找一直知道节点的左子节点知道节点的左子节点为空为止
         TTTreeNode<T> *p = node->right;
         if (p != nullptr) {
-            while (p != nullptr) {
+            while (p->left != nullptr) {
                 p = p->left;
             }
             
@@ -202,7 +202,7 @@ private:
             //找到后继节点
             TTTreeNode<T> *s = successor(node);
             //用后继节点的值覆盖度为2的节点的值
-            s->element = node->element;
+            node->element = s->element;
             //删除后继节点
             node = s;
         }
@@ -220,6 +220,9 @@ private:
             } else { //被删除的节点是删除节点的右节点
                 node->parent->right = replacement;
             }
+            
+            //恢复平衡
+            afterRemove(node);
         } else if (node->parent == nullptr) { //node是叶子节点并且是根节点
             delete m_root;
             m_root = nullptr;
@@ -229,6 +232,9 @@ private:
             } else {
                 node->parent->left = nullptr;
             }
+            
+            //恢复平衡
+            afterRemove(node);
         }
         
         //最后一步回收内存
@@ -437,7 +443,9 @@ public:
     }
 protected:
     //虚继承，添加节点后再平衡二叉树
-    virtual void afterAdd(TTTreeNode<T> *node) {};
+    virtual void afterAdd(TTTreeNode<T> *node) {}
+    //虚继承，删除节点后调整平衡
+    virtual void afterRemove(TTTreeNode<T> *node) {}
     virtual TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {
         return new TTTreeNode<T>(element, parent);
     }
