@@ -9,6 +9,7 @@
 #include <deque>
 #include <vector>
 #include <deque>
+#include <queue>
 #include <stack>
 #include <unordered_map>
 
@@ -274,6 +275,48 @@ bool isSubtree(TreeNode* s, TreeNode* t) {
     }
     
     return isSubtree(s->left, t) || isSubtree(s->right, t);
+}
+
+/*
+ 993. 二叉树的堂兄弟节点
+ https://leetcode-cn.com/problems/cousins-in-binary-tree/
+ */
+bool isCousins(TreeNode* root, int x, int y) {
+    if (root == nullptr) return false;
+    queue<TreeNode *> q;
+    q.push(root);
+    int flag = 2;
+    while(!q.empty()) {
+        int levelSize = (int)q.size();
+        for (int i = 0; i < levelSize; i++) {
+            TreeNode *node = q.front();
+            q.pop();
+            //如果是兄弟节点，则不符合
+            if ((node->left != nullptr && node->right != nullptr) &&
+                ((node->left->val == x && node->right->val == y) ||
+                 (node->left->val == y && node->right->val == x))) {
+                return false;
+            }
+            
+            if (node->left != nullptr) {
+                q.push(node->left);
+                if (node->left->val == x || node->left->val == y) flag--;
+            }
+            
+            if (node->right != nullptr) {
+                q.push(node->right);
+                if (node->right->val == x || node->right->val == y) flag--;
+            }
+        }
+        
+        
+        //该层自发现一个，说明x,y不在同一层，返回false
+        if (flag == 1) return false;
+        //x,y在同一层，且前面为亲兄弟节点的情况已经排除，所以是堂兄弟
+        if (flag == 0) return true;
+    }
+    
+    return false;
 }
 
 int main(int argc, const char * argv[]) {

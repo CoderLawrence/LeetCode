@@ -724,6 +724,28 @@ vector<vector<string>> groupAnagrams(vector<string>& strs) {
     return res_strs;
 }
 
+/*
+ 738. 单调递增的数字
+ https://leetcode-cn.com/problems/monotone-increasing-digits/
+ */
+int monotoneIncreasingDigits(int N) {
+    string strN = to_string(N);
+    int len = (int)strN.length();
+    int flag = len;
+    for (int i = len - 1; i > 0; i--) {
+        if (strN[i - 1] > strN[i]) {
+            strN[i - 1]--;
+            flag = i;
+        }
+    }
+    
+    for (int i = flag; i < len; i++) {
+        strN[i] = '9';
+    }
+    
+    return stoi(strN);
+}
+
 //MARK: - --------------- 困难题 -----------------
 
 /*
