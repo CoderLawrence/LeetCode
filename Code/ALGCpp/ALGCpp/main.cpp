@@ -14,6 +14,8 @@
 #include "TTBSTree.hpp"
 #include "AVLTree.hpp"
 
+#include "TTListSet.hpp"
+
 using namespace std;
 
 class Person: public TTBSTComparable<Person> {
@@ -26,8 +28,7 @@ public:
     Person(int age):m_age(age) {}
 };
 
-int main(int argc, const char * argv[]) {
-    
+void stack_test() {
     cout << "--------- TTStack ------------------ " << endl;
     //使用数组实现栈
     TTStack<int> stack(22);
@@ -38,7 +39,9 @@ int main(int argc, const char * argv[]) {
     
     cout << stack.isEmpty() << endl;
     cout << stack.top() << endl;
-    
+}
+
+void linkedList_test() {
     cout << "--------- TTLinkedList ------------------ " << endl;
     //双向链表
     TTLinkedList<int> linkedList;
@@ -51,7 +54,9 @@ int main(int argc, const char * argv[]) {
     cout << "indexOf:" << linkedList.indexOf(55) << endl;
     cout << "element:" << linkedList.remove(0) << endl;
     linkedList.clear();
-    
+}
+
+void queue_test() {
     cout << "--------- TTQueue ------------------ " << endl;
     //基于双向链表实现的队列
     TTQueue<int> queue(11);
@@ -74,7 +79,9 @@ int main(int argc, const char * argv[]) {
     while (!dqueue.isEmpty()) {
         cout <<"dequeue::de_queue_rear():" << dqueue.de_queue_rear() << endl;
     }
-    
+}
+
+void BSTTree_test() {
     cout << "--------- TTBSTree ------------------ " << endl;
     //二叉搜索树
     TTBSTree<int> BSTree;
@@ -105,6 +112,9 @@ int main(int argc, const char * argv[]) {
     //判断树是否为完全二叉树
     cout << "BSTree::isComplete()" << BSTree.isComplete() << endl;
     
+}
+
+void AVLTree_test() {
     cout << "---------------------- AVLTree -------------------" << endl;
     AVLTree<int> AVLTree;
     AVLTree.add(4);
@@ -139,6 +149,19 @@ int main(int argc, const char * argv[]) {
     //层次遍历
     cout << "AVLTree::levelOrderTraversal()" << endl;
     AVLTree.levelOrderTraversal();
-    
+}
+
+void set_test() {
+    cout << "--------------- TTListSet -------------------" << endl;
+    TTListSet<int> listSet;
+}
+
+int main(int argc, const char * argv[]) {
+    stack_test();
+    linkedList_test();
+    queue_test();
+    BSTTree_test();
+    AVLTree_test();
+    set_test();
     return 0;
 }
