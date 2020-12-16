@@ -14,6 +14,7 @@
 #include <stack>
 #include <deque>
 #include <string>
+#include <sstream>
 
 /*
  坚持不懈， 每日一题，加油！！！
@@ -516,6 +517,45 @@ bool lemonadeChange2(vector<int>& bills) {
     return true;
 }
 
+/*
+ 290. 单词规律
+ https://leetcode-cn.com/problems/word-pattern/
+ */
+vector<string> getWords(string s) {
+    vector<string> words;
+    istringstream iss(s);
+    string token;
+    while(getline(iss, token, ' ')) {
+        words.push_back(token);
+    }
+    
+    return words;
+}
+
+bool wordPattern(string pattern, string s) {
+    vector<string> words = getWords(s);
+    int p_len = (int)pattern.length();
+    int s_len = (int)words.size();
+    if (p_len != s_len) {
+        return false;
+    }
+    
+    unordered_map<char, string> map;
+    for (int i = 0; i < p_len; i++) {
+        map[pattern[i]] = words[i];
+    }
+    
+    for (int i = 0; i < p_len; i++) {
+        if (map.find(pattern[i])->second != words[i]) {
+            return false;
+        } else {
+            continue;
+        }
+    }
+    
+    return true;
+}
+
 //MARK: - ------------ 中等难度 ---------------------
 /*
  973. 最接近原点的 K 个点
@@ -957,6 +997,9 @@ int main(int argc, const char * argv[]) {
     cout << "groupAnagrams" << endl;
     vector<string> nums13 = {"eat","tea","tan","ate","nat","bat"};
     groupAnagrams(nums13);
+    
+    cout << "wordPattern" << endl;
+    wordPattern("abba", "dog cat cat dog");
     
     return 0;
 }
