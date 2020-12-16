@@ -15,6 +15,7 @@
 #include "AVLTree.hpp"
 
 #include "TTListSet.hpp"
+#include "TTMap.hpp"
 
 using namespace std;
 
@@ -156,6 +157,11 @@ void set_test() {
     TTListSet<int> listSet;
 }
 
+void map_test() {
+    cout << "--------------- TTMap -------------------" << endl;
+    TTMap<int, int> map;
+}
+
 int main(int argc, const char * argv[]) {
     stack_test();
     linkedList_test();
@@ -163,5 +169,7 @@ int main(int argc, const char * argv[]) {
     BSTTree_test();
     AVLTree_test();
     set_test();
+    map_test();
+    
     return 0;
 }
