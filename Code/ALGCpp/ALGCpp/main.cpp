@@ -156,6 +156,38 @@ void AVLTree_test() {
 void RBTree_test() {
     cout << "---------------- RBTree ------------------------" << endl;
     TTRBTree<int> RBTree;
+    RBTree.add(4);
+    RBTree.add(5);
+    RBTree.add(8);
+    RBTree.add(6);
+    RBTree.add(1);
+    RBTree.add(12);
+    RBTree.add(13);
+    RBTree.add(16);
+    //前序遍历
+    cout << "RBTree::inorderTraversal()" << endl;
+    RBTree.preorderTraversal();
+    //中序遍历
+    cout << "RBTree::inorderTraversal()" << endl;
+    RBTree.inorderTraversal();
+    //后序遍历
+    cout << "RBTree::postorderTraversal()" << endl;
+    RBTree.postorderTraversal();
+    //层次遍历
+    cout << "RBTree::levelOrderTraversal()" << endl;
+    RBTree.levelOrderTraversal();
+    //获取树的大小
+    cout << RBTree.size() << endl;
+    //获取树的高度
+    cout << "RBTree::height()" << RBTree.height() << endl;
+    //判断树是否为完全二叉树
+    cout << "RBTree::isComplete()" << RBTree.isComplete() << endl;
+    //删除节点
+    cout << "RBTree::remove(5)" << endl;
+    RBTree.remove(5);
+    //层次遍历
+    cout << "RBTree::levelOrderTraversal()" << endl;
+    RBTree.levelOrderTraversal();
 }
 
 void set_test() {
@@ -175,6 +207,7 @@ int main(int argc, const char * argv[]) {
     BSTTree_test();
     AVLTree_test();
     BSTTree_test();
+    RBTree_test();
     set_test();
     map_test();
     

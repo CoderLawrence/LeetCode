@@ -23,13 +23,22 @@ public:
     RBTreeNode(const T &x, TTTreeNode<T> *parent):TTTreeNode<T>(x, parent){}
 };
 
+/*
+ 红黑树
+ 满足红黑树的五大性质：
+ 1、
+ 2、
+ 3、
+ 4、
+ 5
+ */
 template <class T>
 class TTRBTree: public TTBSTree<T> {
 private:
 #pragma mark -------------- 节点染色辅助方法 ------------------------
     /// 对节点进行染色
     TTTreeNode<T> *color(TTTreeNode<T> *node, RBTNodeColor color) {
-        if (node == nullptr) node;
+        if (node == nullptr) return node;
         ((RBTreeNode<T> *)node)->color = color;
         return node;
     }
@@ -56,7 +65,7 @@ private:
     }
 protected:
     void afterAdd(TTTreeNode<T> *node) {
-        
+        color(node, RED);
     }
     
     void afterRemove(TTTreeNode<T> *node) {

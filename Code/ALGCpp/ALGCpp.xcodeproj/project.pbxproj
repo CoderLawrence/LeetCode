@@ -29,7 +29,6 @@
 		2176AFCA255459C7007E659B /* TTCircleQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTCircleQueue.hpp; sourceTree = "<group>"; };
 		217D1A16258A66FB002A4595 /* TTMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTMap.hpp; sourceTree = "<group>"; };
 		217D1A1B258A6A5A002A4595 /* TTRBTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTRBTree.hpp; sourceTree = "<group>"; };
-		217D1A20258A6AA3002A4595 /* TTBBSTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTBBSTree.hpp; sourceTree = "<group>"; };
 		2181096025754618006E00EC /* AVLTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVLTree.hpp; sourceTree = "<group>"; };
 		219391AA254FF4F2003A4A29 /* ALGCpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ALGCpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		219391AD254FF4F2003A4A29 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -64,7 +63,6 @@
 				2168A6F6255D543100417E65 /* TTBSTree.hpp */,
 				2181096025754618006E00EC /* AVLTree.hpp */,
 				217D1A1B258A6A5A002A4595 /* TTRBTree.hpp */,
-				217D1A20258A6AA3002A4595 /* TTBBSTree.hpp */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
