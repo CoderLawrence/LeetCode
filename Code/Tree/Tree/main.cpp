@@ -319,6 +319,43 @@ bool isCousins(TreeNode* root, int x, int y) {
     return false;
 }
 
+bool traversalPathSum(TreeNode *root, int sum, int path) {
+    cout << "path" << path << endl;
+    if (root == nullptr) {
+        return path == sum;
+    }
+    
+    return traversalPathSum(root->left, sum, path + root->val) ||
+    traversalPathSum(root->right, sum, path + root->val);
+}
+
+bool hasPathSum(TreeNode* root, int sum) {
+    if (root == nullptr) return false;
+    if (root->val == sum) return false;
+    return traversalPathSum(root->left, sum, root->val) ||
+    traversalPathSum(root->right, sum, root->val);
+}
+
 int main(int argc, const char * argv[]) {
+    TreeNode *root = new TreeNode(5);
+    TreeNode *node_1 = new TreeNode(4);
+    root->left = node_1;
+    TreeNode *node_2 = new TreeNode(8);
+    root->right = node_2;
+    TreeNode *node_3 = new TreeNode(11);
+    node_1->left = node_3;
+    TreeNode *node_4 = new TreeNode(13);
+    node_2->left = node_4;
+    TreeNode *node_5 = new TreeNode(4);
+    node_2->right = node_5;
+    TreeNode *node_6 = new TreeNode(7);
+    node_3->left = node_6;
+    TreeNode *node_7 = new TreeNode(2);
+    node_3->right = node_7;
+    TreeNode *node_8 = new TreeNode(1);
+    node_5->right = node_8;
+    
+    cout << hasPathSum(root, 9) << endl;
+    
     return 0;
 }
