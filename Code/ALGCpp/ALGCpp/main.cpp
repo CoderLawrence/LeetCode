@@ -13,6 +13,7 @@
 
 #include "TTBSTree.hpp"
 #include "AVLTree.hpp"
+#include "TTRBTree.hpp"
 
 #include "TTListSet.hpp"
 #include "TTMap.hpp"
@@ -152,6 +153,11 @@ void AVLTree_test() {
     AVLTree.levelOrderTraversal();
 }
 
+void RBTree_test() {
+    cout << "---------------- RBTree ------------------------" << endl;
+    TTRBTree<int> RBTree;
+}
+
 void set_test() {
     cout << "--------------- TTListSet -------------------" << endl;
     TTListSet<int> listSet;
@@ -168,6 +174,7 @@ int main(int argc, const char * argv[]) {
     queue_test();
     BSTTree_test();
     AVLTree_test();
+    BSTTree_test();
     set_test();
     map_test();
     

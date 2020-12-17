@@ -36,6 +36,18 @@ public:
     bool isRightChild() {
         return this->parent != nullptr && this == this->parent->right;
     }
+    
+    /// 获得兄弟节点
+    TTTreeNode<T> *sibling() {
+        //如果是父节点的左子节点，那么兄弟节点为父节点的右节点
+        if (isLeftChild()) {
+            return this->parent->right;
+        } else if (isRightChild()) { //与上面相反
+            return this->parent->left;
+        }
+        
+        return nullptr;
+    }
 };
 
 #endif /* TTTreeNode_hpp */
