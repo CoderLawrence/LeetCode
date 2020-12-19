@@ -34,35 +34,10 @@ public:
  */
 template <class T>
 class TTRBTree: public TTBBSTree<T> {
-private:
-#pragma mark -------------- 节点染色辅助方法 ------------------------
-    /// 对节点进行染色
-    TTTreeNode<T> *color(TTTreeNode<T> *node, RBTNodeColor color) {
-        if (node == nullptr) return node;
-        ((RBTreeNode<T> *)node)->color = color;
-        return node;
-    }
-    
-    TTTreeNode<T> *red(TTTreeNode<T> *node) {
-        return color(node, RED);
-    }
-    
-    TTTreeNode<T> *black(TTTreeNode<T> *node) {
-        return color(node, BLACK);
-    }
-    
-    /// 判断节点颜色
-    RBTNodeColor colorOf(TTTreeNode<T> *node) {
-        return node == nullptr ? BLACK : ((RBTreeNode<T> *)node)->color;
-    }
-    
-    bool isBlack(TTTreeNode<T> *node) {
-        return colorOf(node) == BLACK;
-    }
-    
-    bool isRed(TTTreeNode<T> *node) {
-        return colorOf(node) == RED;
-    }
+public:
+    //调用父类构造函数初始化
+    TTRBTree():TTBBSTree<T>() {}
+    ~TTRBTree() {}
 protected:
     void afterAdd(TTTreeNode<T> *node) {
         TTTreeNode<T> *parent = node->parent;
@@ -195,10 +170,35 @@ protected:
     TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {
         return new RBTreeNode<T>(element, parent);
     }
-public:
-    //调用父类构造函数初始化
-    TTRBTree():TTBBSTree<T>() {}
-    ~TTRBTree() {}
+private:
+#pragma mark -------------- 节点染色辅助方法 ------------------------
+    /// 对节点进行染色
+    TTTreeNode<T> *color(TTTreeNode<T> *node, RBTNodeColor color) {
+        if (node == nullptr) return node;
+        ((RBTreeNode<T> *)node)->color = color;
+        return node;
+    }
+    
+    TTTreeNode<T> *red(TTTreeNode<T> *node) {
+        return color(node, RED);
+    }
+    
+    TTTreeNode<T> *black(TTTreeNode<T> *node) {
+        return color(node, BLACK);
+    }
+    
+    /// 判断节点颜色
+    RBTNodeColor colorOf(TTTreeNode<T> *node) {
+        return node == nullptr ? BLACK : ((RBTreeNode<T> *)node)->color;
+    }
+    
+    bool isBlack(TTTreeNode<T> *node) {
+        return colorOf(node) == BLACK;
+    }
+    
+    bool isRed(TTTreeNode<T> *node) {
+        return colorOf(node) == RED;
+    }
 };
 
 #endif /* TTRBTree_hpp */
