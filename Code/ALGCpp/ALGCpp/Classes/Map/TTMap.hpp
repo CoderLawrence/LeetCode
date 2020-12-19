@@ -8,13 +8,21 @@
 #ifndef TTMap_hpp
 #define TTMap_hpp
 
+#include "TTRBTree.hpp"
+
 template <class K, class V>
 class TTMap {
 private:
     int m_size;
+    TTRBTree<V> *m_rbtree;
 public:
-    TTMap():m_size(0) {}
-    ~TTMap() {}
+    TTMap():m_size(0) {
+        m_rbtree = new TTRBTree<V>();
+    }
+    
+    ~TTMap() {
+        delete m_rbtree;
+    }
     
     int size() const {
         return m_size;
