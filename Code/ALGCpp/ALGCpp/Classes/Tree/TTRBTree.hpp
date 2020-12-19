@@ -8,7 +8,7 @@
 #ifndef TTRBTree_hpp
 #define TTRBTree_hpp
 
-#include "TTBSTree.hpp"
+#include "TTBBSTree.hpp"
 
 enum RBTNodeColor {
     RED = 0,
@@ -33,7 +33,7 @@ public:
  5
  */
 template <class T>
-class TTRBTree: public TTBSTree<T> {
+class TTRBTree: public TTBBSTree<T> {
 private:
 #pragma mark -------------- 节点染色辅助方法 ------------------------
     /// 对节点进行染色
@@ -65,7 +65,47 @@ private:
     }
 protected:
     void afterAdd(TTTreeNode<T> *node) {
-        color(node, RED);
+        TTTreeNode<T> *parent = node->parent;
+        //添加的是根节点，直接染成黑色
+        if (parent == nullptr) {
+            black(node);
+            return;
+        }
+        
+        //如果父节点是黑色，不用做额外处理，直接返回
+        if (isBlack(parent)) return;
+        // uncle节点
+        TTTreeNode<T> *uncle = parent->sibling();
+        //祖父节点
+        TTTreeNode<T> *grand = parent->parent;
+        if (isRed(uncle)) { //叔父节点是红色
+            black(parent);
+            black(uncle);
+            //递归调用
+            afterAdd(red(grand));
+            return;
+        }
+        
+        //叔父节点不是红色
+        if (parent->isLeftChild()) { // L
+            if (node->isLeftChild()) { // LL
+                black(parent);
+                red(grand);
+                TTBBSTree<T>::rotateRight(grand);
+            } else { // LR
+                TTBBSTree<T>::rotateLeft(grand);
+                TTBBSTree<T>::rotateRight(grand);
+            }
+        } else { //R
+            if (node->isLeftChild()) { //RL
+                TTBBSTree<T>::rotateRight(grand);
+                TTBBSTree<T>::rotateLeft(grand);
+            } else { //RR
+                black(parent);
+                red(grand);
+                TTBBSTree<T>::rotateLeft(grand);
+            }
+        }
     }
     
     void afterRemove(TTTreeNode<T> *node) {
@@ -77,7 +117,7 @@ protected:
     }
 public:
     //调用父类构造函数初始化
-    TTRBTree():TTBSTree<T>(nullptr) {}
+    TTRBTree():TTBBSTree<T>() {}
     ~TTRBTree() {}
 };
 

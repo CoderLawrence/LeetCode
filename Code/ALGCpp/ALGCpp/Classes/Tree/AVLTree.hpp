@@ -9,7 +9,7 @@
 #define AVLTree_hpp
 
 #include <math.h>
-#include "TTBSTree.hpp"
+#include "TTBBSTree.hpp"
 
 template<class T>
 class AVLTreeNode: public TTTreeNode<T> {
@@ -46,7 +46,7 @@ public:
  自平衡：自平衡就是左子树和右子树的高度相对接近
  */
 template<class T>
-class AVLTree: public TTBSTree<T> {
+class AVLTree: public TTBBSTree<T> {
 private:
     bool isBalanced(TTTreeNode<T> *node) {
         //求绝对值
@@ -64,64 +64,20 @@ private:
         //如果父节点为左子树
         if (parent->isLeftChild()) { //L
             if (node->isLeftChild()) { //LL
-                rotateRight(grand);
+                TTBBSTree<T>::rotateRight(grand);
             } else { //LR
-                rotateLeft(parent);
-                rotateRight(grand);
+                TTBBSTree<T>::rotateLeft(parent);
+                TTBBSTree<T>::rotateRight(grand);
             }
         } else { //R
             if (node->isLeftChild()) { //RL
-                rotateRight(parent);
-                rotateLeft(grand);
+                TTBBSTree<T>::rotateRight(parent);
+                TTBBSTree<T>::rotateLeft(grand);
             } else { //RR
-                rotateLeft(grand);
+                TTBBSTree<T>::rotateLeft(grand);
             }
         }
     }
-    
-    //左旋转
-    void rotateLeft(TTTreeNode<T> *grand) {
-        TTTreeNode<T> *parent = grand->right;
-        TTTreeNode<T> *child = parent->left;
-        //有旋转
-        grand->right = parent->left;
-        parent->left = grand;
-        //更新节点的父节点和高度
-        afterRotate(grand, parent, child);
-    }
-    
-    //右旋转
-    void rotateRight(TTTreeNode<T> *grand) {
-        TTTreeNode<T> *parent = grand->left;
-        TTTreeNode<T> *child = parent->right;
-        //有旋转
-        grand->left = child;
-        parent->right = grand;
-        //更新节点的父节点和高度
-        afterRotate(grand, parent, child);
-    }
-    
-    void afterRotate(TTTreeNode<T> *grand, TTTreeNode<T> *parent, TTTreeNode<T> *child) {
-        //更新父节点的子节点的指向
-        parent->parent = grand->parent;
-        if (grand->isLeftChild()) {
-            grand->parent->left = parent;
-        } else if (grand->isRightChild()) {
-            grand->parent->right = parent;
-        } else {
-            TTBSTree<T>::updateRoot(parent);
-        }
-        
-        if (child != nullptr) {
-            child->parent = grand;
-        }
-        
-        grand->parent = parent;
-        //更新高度
-        updateHeight(grand);
-        updateHeight(parent);
-    }
-    
 protected:
     void afterAdd(TTTreeNode<T> *node) {
         while ((node = node->parent) != nullptr) {
@@ -151,12 +107,19 @@ protected:
         }
     }
     
+    void afterRotate(TTTreeNode<T> *grand, TTTreeNode<T> *parent, TTTreeNode<T> *child) {
+        TTBBSTree<T>::afterRotate(grand, parent, child);
+        //更新高度
+        updateHeight(grand);
+        updateHeight(parent);
+    }
+    
     TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {
         return new AVLTreeNode<T>(element, parent);
     }
 public:
     //调用父类构造函数初始化
-    AVLTree():TTBSTree<T>(nullptr) {}
+    AVLTree():TTBBSTree<T>() {}
     ~AVLTree() {};
 };
 
