@@ -78,7 +78,7 @@ protected:
         TTTreeNode<T> *uncle = parent->sibling();
         //祖父节点
         TTTreeNode<T> *grand = parent->parent;
-        if (isRed(uncle)) { //叔父节点是红色
+        if (isRed(uncle)) { //叔父节点是红色【B树节点上益】
             black(parent);
             black(uncle);
             //递归调用
@@ -88,28 +88,108 @@ protected:
         
         //叔父节点不是红色
         if (parent->isLeftChild()) { // L
+            red(grand);
             if (node->isLeftChild()) { // LL
                 black(parent);
-                red(grand);
-                TTBBSTree<T>::rotateRight(grand);
+                //有旋转祖父节点，放到下面统一处理
             } else { // LR
-                TTBBSTree<T>::rotateLeft(grand);
-                TTBBSTree<T>::rotateRight(grand);
+                //自己染成黑色，父节点染成红色
+                black(node);
+                TTBBSTree<T>::rotateLeft(parent);
             }
+            //祖父节点右旋
+            TTBBSTree<T>::rotateRight(grand);
         } else { //R
+            red(grand);
             if (node->isLeftChild()) { //RL
-                TTBBSTree<T>::rotateRight(grand);
-                TTBBSTree<T>::rotateLeft(grand);
+                black(node);
+                TTBBSTree<T>::rotateRight(parent);
+                
             } else { //RR
                 black(parent);
-                red(grand);
-                TTBBSTree<T>::rotateLeft(grand);
+                //有旋转祖父节点，放到下面统一处理
             }
+            //祖父节点左旋
+            TTBBSTree<T>::rotateLeft(grand);
         }
     }
     
     void afterRemove(TTTreeNode<T> *node) {
+        //如果删除的节点是红色
+        //或者用以删除节点的子节点是红色
+        if (isRed(node)) {
+            black(node);
+            return;
+        }
         
+        TTTreeNode<T> *parent = node->parent;
+        //删除的是根节点
+        if (parent == nullptr) return;
+        //删除的是黑色叶子节点【下益】
+        //判断被删除的node是左还是右
+        bool left = parent->left == nullptr || node->isLeftChild();
+        TTTreeNode<T> *sibling = left ? parent->right : parent->left;
+        if (left) { //被删除的节点再左边，兄弟节点在右边
+            if (isRed(sibling)) {
+                black(sibling);
+                red(parent);
+                TTBBSTree<T>::rotateLeft(parent);
+                //更换兄弟
+                sibling = parent->right;
+            }
+            
+            //兄弟节点必然是黑色
+            if (isBlack(sibling->left) && isBlack(sibling->right)) {
+                //兄弟节点没有1个红色节点，父节点要向下跟兄弟节点合并
+                bool parentBlack = isBlack(parent);
+                black(parent);
+                red(sibling);
+                if (parentBlack) {
+                    afterRemove(parent);
+                }
+            } else { //兄弟节点至少有1个红色节点，向兄弟节点借元素
+                //兄弟节点的左边是黑色，兄弟要先旋转
+                if (isBlack(sibling->right)) {
+                    TTBBSTree<T>::rotateRight(sibling);
+                    sibling = parent->right;
+                }
+                
+                color(sibling, colorOf(parent));
+                black(sibling->right);
+                black(parent);
+                TTBBSTree<T>::rotateLeft(sibling);
+            }
+        } else { //被删除的节点在右边，兄弟节点在左边
+            if (isRed(sibling)) { //兄弟节点是红色
+                black(sibling);
+                red(parent);
+                TTBBSTree<T>::rotateRight(parent);
+                //更换兄弟
+                sibling = parent->left;
+            }
+            
+            //兄弟节点必然是黑色
+            if (isBlack(sibling->left) && isBlack(sibling->right)) {
+                //兄弟节点没有1个红色节点，父节点要向下跟兄弟节点合并
+                bool parentBlack = isBlack(parent);
+                black(parent);
+                red(sibling);
+                if (parentBlack) {
+                    afterRemove(parent);
+                }
+            } else { //兄弟节点至少有一个红色子节点，向兄弟节点借元素
+                //兄弟节点的左边是黑色，兄弟要先旋转
+                if (isBlack(sibling->left)) {
+                    TTBBSTree<T>::rotateLeft(sibling);
+                    sibling = parent->left;
+                }
+                
+                color(sibling, colorOf(parent));
+                black(sibling->left);
+                black(parent);
+                TTBBSTree<T>::rotateRight(parent);
+            }
+        }
     }
     
     TTTreeNode<T> *createNode(const T &element, TTTreeNode<T> *parent) {

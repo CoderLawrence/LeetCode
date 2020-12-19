@@ -370,42 +370,7 @@ public:
         return height;
     }
     
-    //MARK: - 判断是否为完全二叉树
-    /*
-     判断是否为完全二叉树
-     */
-    bool isComplete2() {
-        //1、完全二叉树，如果左子节点为空，右子节点不为空，那么不是完全二叉树，
-        //因为在完全二叉树中，如果只有一个叶子节点，那么必须为左子节点
-        //2、如果一个节点它的节点的度不为2那么接下来的所有子节点都是叶子节点
-        if (m_root == nullptr) return false;
-        deque<TTTreeNode<T> *> queue;
-        queue.push_back(m_root);
-        bool isLeaf = false;
-        while (!queue.empty()) {
-            TTTreeNode<T> *node = queue.front();
-            queue.pop_front();
-            //如果是叶子节点，那么只存在一个子节点，而且必须是左子节点
-            if (isLeaf && !(node->left == nullptr && node->right != nullptr)) {
-                return false;
-            }
-            
-            if (node->left != nullptr && node->right != nullptr) {
-                queue.push_back(node->left);
-                queue.push_back(node->right);
-            } else if (node->left == nullptr && node->right != nullptr) { //判断是否只有左子节点
-                return false;
-            } else { //是叶子节点
-                isLeaf = true;
-                if (node->left != nullptr) {
-                    queue.push_back(node->left);
-                }
-            }
-        }
-        
-        return true;
-    }
-    
+    /// 判断是否为完全二叉树
     bool isComplete() {
         //1、完全二叉树，如果左子节点为空，右子节点不为空，那么不是完全二叉树，
         //因为在完全二叉树中，如果只有一个叶子节点，那么必须为左子节点
