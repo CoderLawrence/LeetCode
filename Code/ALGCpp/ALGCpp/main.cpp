@@ -23,16 +23,6 @@
 
 using namespace std;
 
-class Person: public TTBSTComparable<Person> {
-public:
-    int m_age;
-    int compareTo(const Person &e) {
-        return m_age - e.m_age;
-    }
-    
-    Person(int age):m_age(age) {}
-};
-
 void stack_test() {
     cout << "--------- TTStack ------------------ " << endl;
     //使用数组实现栈
@@ -222,8 +212,12 @@ void set_test() {
 
 void map_test() {
     cout << "--------------- TTMap -------------------" << endl;
-    TTMap<int, int> *map = new TTTreeMap<int, int>();
-    map->containsKey(1);
+    TTTreeMap<int, int> *map = new TTTreeMap<int, int>();
+    map->put(1, 1);
+    map->put(2, 1);
+    cout << map->containsKey(1) << endl;
+    cout << map->containsKey(2) << endl;
+    delete map;
 }
 
 int main(int argc, const char * argv[]) {

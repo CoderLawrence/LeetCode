@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <deque>
+#include <queue>
 
 using namespace std;
 
@@ -27,13 +28,6 @@ template <class T>
 class TTBSTComparable {
 public:
     virtual int compareTo(const T &e) = 0;
-};
-
-class TTBSTDefaultComparator: public TTBSTComparator<int> {
-public:
-    int compare(const int &e1, const int &e2) {
-        return e1 - e2;
-    }
 };
 
 /*
@@ -77,7 +71,7 @@ private:
     }
     
     /// 获取节点
-    TTTreeNode<T> *get_node(const T element) {
+    TTTreeNode<T> *getNode(const T element) {
         elementNotNullCheck(element);
         TTTreeNode<T> *node = m_root;
         while (node != nullptr) {
@@ -247,7 +241,7 @@ public:
     TTBSTree():TTBSTree(nullptr) {}
     
     ~TTBSTree() {
-        
+        clear();
     }
     
     int size() const {
@@ -259,7 +253,28 @@ public:
     }
     
     void clear() {
+        if (m_root == nullptr) return;
+        queue<TTTreeNode<T> *> q;
+        q.push(m_root);
+        while (!q.empty()) {
+            int levelSize = (int)q.size();
+            for (int i = 0; i < levelSize; i++) {
+                TTTreeNode<T> *node = q.front();
+                q.pop();
+                if (node->left != nullptr) {
+                    q.push(node->left);
+                }
+                
+                if (node->right != nullptr) {
+                    q.push(node->right);
+                }
+                
+                delete node;
+            }
+        }
         
+        m_root = nullptr;
+        m_size = 0;
     }
     
     void add(const T &element) {
@@ -302,12 +317,12 @@ public:
     
     void remove(const T &element) {
         //找到要删除的节点
-        TTTreeNode<T> *node = get_node(element);
+        TTTreeNode<T> *node = getNode(element);
         removeNode(node);
     }
     
     bool contains(const T &element) {
-        return get_node(element) != nullptr;
+        return getNode(element) != nullptr;
     }
     
     //MARK: ------------- 二叉搜索树树的遍历 ------------------------------------

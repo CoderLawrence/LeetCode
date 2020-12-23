@@ -22,6 +22,9 @@ public:
     TTTreeNode():TTTreeNode(NULL, NULL) {}
     TTTreeNode(const T &x, TTTreeNode<T> *parent):
         element(x), left(NULL), right(NULL), parent(parent) {}
+    ~TTTreeNode() {
+        
+    }
     /// 是否为叶子节点
     bool isLeaf() {
         return this->left == nullptr && this->right == nullptr;

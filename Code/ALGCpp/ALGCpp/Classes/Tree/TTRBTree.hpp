@@ -9,16 +9,12 @@
 #define TTRBTree_hpp
 
 #include "TTBBSTree.hpp"
-
-enum RBTNodeColor {
-    RED = 0,
-    BLACK = 1,
-};
+#include "Eums.h"
 
 template<class T>
 class RBTreeNode: public TTTreeNode<T> {
 public:
-    RBTNodeColor color = RED;
+    TTNodeColor color = RED;
     RBTreeNode():TTTreeNode<T>(nullptr, nullptr) {}
     RBTreeNode(const T &x, TTTreeNode<T> *parent):TTTreeNode<T>(x, parent){}
 };
@@ -173,7 +169,7 @@ protected:
 private:
 #pragma mark -------------- 节点染色辅助方法 ------------------------
     /// 对节点进行染色
-    TTTreeNode<T> *color(TTTreeNode<T> *node, RBTNodeColor color) {
+    TTTreeNode<T> *color(TTTreeNode<T> *node, TTNodeColor color) {
         if (node == nullptr) return node;
         ((RBTreeNode<T> *)node)->color = color;
         return node;
@@ -188,7 +184,7 @@ private:
     }
     
     /// 判断节点颜色
-    RBTNodeColor colorOf(TTTreeNode<T> *node) {
+    TTNodeColor colorOf(TTTreeNode<T> *node) {
         return node == nullptr ? BLACK : ((RBTreeNode<T> *)node)->color;
     }
     
