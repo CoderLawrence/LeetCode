@@ -19,6 +19,7 @@
 #include "TTTreeSet.hpp"
 
 #include "TTMap.hpp"
+#include "TTTreeMap.hpp"
 
 using namespace std;
 
@@ -221,7 +222,8 @@ void set_test() {
 
 void map_test() {
     cout << "--------------- TTMap -------------------" << endl;
-    TTMap<int, int> map;
+    TTMap<int, int> *map = new TTTreeMap<int, int>();
+    map->containsKey(1);
 }
 
 int main(int argc, const char * argv[]) {

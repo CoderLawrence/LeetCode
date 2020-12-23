@@ -8,53 +8,20 @@
 #ifndef TTMap_hpp
 #define TTMap_hpp
 
-#include "TTRBTree.hpp"
-
 template <class K, class V>
 class TTMap {
-private:
-    int m_size;
-    TTRBTree<V> *m_rbtree;
 public:
-    TTMap():m_size(0) {
-        m_rbtree = new TTRBTree<V>();
-    }
+    TTMap() {}
+    ~TTMap() {}
     
-    ~TTMap() {
-        delete m_rbtree;
-    }
-    
-    int size() const {
-        return m_size;
-    }
-    
-    bool isEmpty() const {
-        return m_size == 0;
-    }
-    
-    void clear() {
-        m_size = 0;
-    }
-    
-    V put(const K &key, const V &value) {
-        
-    }
-    
-    V get(const K &key) {
-        
-    }
-    
-    void remove(const K &key) {
-        
-    }
-    
-    bool containsKey(const K &key) {
-        
-    }
-    
-    bool containsValue(const V &value) {
-        
-    }
+    virtual int size() = 0;
+    virtual bool isEmpty() = 0;
+    virtual void clear() = 0;
+    virtual V put(const K &key, const V &value) = 0;
+    virtual V get(const K &key) = 0;
+    virtual V remove(const K &key) = 0;
+    virtual bool containsKey(const K &key) = 0;
+    virtual bool containsValue(const V &value) = 0;
 };
 
 #endif /* TTMap_hpp */
