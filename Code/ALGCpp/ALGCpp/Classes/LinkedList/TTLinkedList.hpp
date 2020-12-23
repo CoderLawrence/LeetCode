@@ -31,8 +31,6 @@ public:
 template <class T>
 class TTLinkedList {
 private:
-    const int ELEMENT_NOT_FOUND = -1;
-    
     int m_size = 0;
     TTNode<T> *first;
     TTNode<T> *last;
@@ -73,6 +71,7 @@ private:
     }
     
 public:
+    static const int ELEMENT_NOT_FOUND = -1;
     TTLinkedList() {}
     ~TTLinkedList() {
         clear();

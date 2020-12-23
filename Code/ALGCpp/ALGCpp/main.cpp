@@ -16,6 +16,8 @@
 #include "TTRBTree.hpp"
 
 #include "TTListSet.hpp"
+#include "TTTreeSet.hpp"
+
 #include "TTMap.hpp"
 
 using namespace std;
@@ -193,6 +195,28 @@ void RBTree_test() {
 void set_test() {
     cout << "--------------- TTListSet -------------------" << endl;
     TTListSet<int> listSet;
+    listSet.add(1);
+    listSet.add(1);
+    listSet.add(2);
+    listSet.add(3);
+    listSet.add(3);
+    listSet.add(4);
+    listSet.traversal();
+    
+    cout << "--------------- TreeSet --------------------" << endl;
+    TTTreeSet<int> treeSet;
+    treeSet.add(7);
+    treeSet.add(9);
+    treeSet.add(12);
+    treeSet.add(1);
+    treeSet.add(1);
+    treeSet.add(2);
+    treeSet.add(3);
+    treeSet.add(3);
+    treeSet.add(4);
+    treeSet.traversal();
+    treeSet.remove(4);
+    treeSet.traversal();
 }
 
 void map_test() {

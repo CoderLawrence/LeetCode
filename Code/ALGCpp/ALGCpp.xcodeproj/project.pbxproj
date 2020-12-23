@@ -36,6 +36,7 @@
 		219391B9254FF559003A4A29 /* TTStack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTStack.hpp; sourceTree = "<group>"; };
 		219A614925526F70004BBE5C /* TTQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTQueue.hpp; sourceTree = "<group>"; };
 		219A615025527050004BBE5C /* TTLinkedList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTLinkedList.hpp; sourceTree = "<group>"; };
+		21D2B37C25921147005EA471 /* TTTreeSet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTTreeSet.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				211BA910258A2E7E00D08DB3 /* TTListSet.hpp */,
+				21D2B37C25921147005EA471 /* TTTreeSet.hpp */,
 			);
 			path = Set;
 			sourceTree = "<group>";
