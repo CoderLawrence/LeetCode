@@ -81,7 +81,7 @@ public:
     }
     
     ~TTTreeMap() {
-        
+        clear();
     }
     
     int size() {
@@ -197,7 +197,16 @@ public:
         return false;
     }
     
+    void traversal() {
+        traversal(m_root);
+    }
 private:
+    void traversal(TTMapNode<K, V> *node) {
+        if (node == nullptr) return;
+        traversal(node->left);
+        traversal(node->right);
+    }
+    
     V remove(TTMapNode<K, V> *node) {
         if (node == nullptr) return node->value;
         m_size--;
@@ -375,13 +384,7 @@ private:
     }
 #pragma mark ----------  辅助方法 -----------------------------
     bool valEquals(V &v1, V &v2) {
-        if (v1 == NULL && v2 == NULL) {
-            return true;
-        } else if (v1 == NULL || v2 == NULL) {
-            return false;
-        } else {
-            return v1 == v2;
-        }
+        return v1 == NULL ? v2 == NULL : v1 == v2;
     }
     
     void keyNotNullCheck(const K &key) {
