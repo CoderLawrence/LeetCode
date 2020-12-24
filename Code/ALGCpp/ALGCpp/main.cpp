@@ -20,6 +20,7 @@
 
 #include "TTMap.hpp"
 #include "TTTreeMap.hpp"
+#include "TTLRUCache.hpp"
 
 using namespace std;
 
@@ -220,6 +221,20 @@ void map_test() {
     delete map;
 }
 
+void LRU_test() {
+    cout << "--------------- LRUCache -------------------" << endl;
+    LRUCache cache(2);
+    cache.put(1, 1);
+    cache.put(2, 2);
+    cache.get(1);
+    cache.put(3, 3);
+    cache.get(2);
+    cache.put(4, 4);
+    cache.get(1);
+    cache.get(3);
+    cache.get(4);
+}
+
 int main(int argc, const char * argv[]) {
     stack_test();
     linkedList_test();
@@ -230,6 +245,7 @@ int main(int argc, const char * argv[]) {
     RBTree_test();
     set_test();
     map_test();
+    LRU_test();
     
     return 0;
 }

@@ -39,6 +39,7 @@
 		219A615025527050004BBE5C /* TTLinkedList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTLinkedList.hpp; sourceTree = "<group>"; };
 		21D2B37C25921147005EA471 /* TTTreeSet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTTreeSet.hpp; sourceTree = "<group>"; };
 		21D2B3DF2592F9FF005EA471 /* TTTreeMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTTreeMap.hpp; sourceTree = "<group>"; };
+		21D2B3E62594875A005EA471 /* TTLRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTLRUCache.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +111,7 @@
 		219391B5254FF501003A4A29 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				21D2B3E42594873B005EA471 /* LRU */,
 				217D1A14258A66E6002A4595 /* Map */,
 				211BA90E258A2E5D00D08DB3 /* Set */,
 				2168A6F2255C0C6D00417E65 /* Tree */,
@@ -144,6 +146,14 @@
 				219A615025527050004BBE5C /* TTLinkedList.hpp */,
 			);
 			path = LinkedList;
+			sourceTree = "<group>";
+		};
+		21D2B3E42594873B005EA471 /* LRU */ = {
+			isa = PBXGroup;
+			children = (
+				21D2B3E62594875A005EA471 /* TTLRUCache.hpp */,
+			);
+			path = LRU;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
