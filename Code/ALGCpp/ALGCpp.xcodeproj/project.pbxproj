@@ -33,6 +33,7 @@
 		217D1A16258A66FB002A4595 /* TTMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTMap.hpp; sourceTree = "<group>"; };
 		217D1A1B258A6A5A002A4595 /* TTRBTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTRBTree.hpp; sourceTree = "<group>"; };
 		2181096025754618006E00EC /* AVLTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVLTree.hpp; sourceTree = "<group>"; };
+		218A43C92596F59E00B01F32 /* TTHashMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTHashMap.hpp; sourceTree = "<group>"; };
 		219391AA254FF4F2003A4A29 /* ALGCpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ALGCpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		219391AD254FF4F2003A4A29 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		219391B9254FF559003A4A29 /* TTStack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTStack.hpp; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 			children = (
 				217D1A16258A66FB002A4595 /* TTMap.hpp */,
 				21D2B3DF2592F9FF005EA471 /* TTTreeMap.hpp */,
+				218A43C92596F59E00B01F32 /* TTHashMap.hpp */,
 			);
 			path = Map;
 			sourceTree = "<group>";
