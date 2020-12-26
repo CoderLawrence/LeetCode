@@ -6,6 +6,7 @@
 //
 
 #include <iostream>
+#include <string>
 
 #include "TTStack.hpp"
 #include "TTQueue.hpp"
@@ -20,6 +21,8 @@
 
 #include "TTMap.hpp"
 #include "TTTreeMap.hpp"
+#include "TTHashMap.hpp"
+
 #include "TTLRUCache.hpp"
 
 using namespace std;
@@ -219,6 +222,11 @@ void map_test() {
     cout << map->containsKey(1) << endl;
     cout << map->containsKey(2) << endl;
     delete map;
+    
+    string str = "Jack";
+    TTHashMap<string, int> hashMap;
+    hashMap.put("Jack", 1);
+    hashMap.put("Jack", 1);
 }
 
 void LRU_test() {

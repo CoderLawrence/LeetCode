@@ -14,8 +14,8 @@ public:
     TTMap() {}
     ~TTMap() {}
     
-    virtual int size() = 0;
-    virtual bool isEmpty() = 0;
+    virtual int size() const = 0;
+    virtual bool isEmpty() const = 0;
     virtual void clear() = 0;
     virtual V put(const K &key, const V &value) = 0;
     virtual V get(const K &key) = 0;

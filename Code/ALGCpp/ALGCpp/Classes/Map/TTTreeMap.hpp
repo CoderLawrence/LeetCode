@@ -84,11 +84,11 @@ public:
         clear();
     }
     
-    int size() {
+    int size() const {
         return m_size;
     }
     
-    bool isEmpty() {
+    bool isEmpty() const {
         return m_size == 0;
     }
     
@@ -236,7 +236,7 @@ private:
             }
             
             //恢复平衡
-            afterRemove(node);
+            afterRemove(replacement);
         } else if (node->parent == nullptr) { //node是叶子节点并且是根节点
             delete m_root;
             m_root = nullptr;
