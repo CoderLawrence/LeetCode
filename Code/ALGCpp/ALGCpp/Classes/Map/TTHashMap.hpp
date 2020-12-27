@@ -8,6 +8,8 @@
 #ifndef TTHashMap_hpp
 #define TTHashMap_hpp
 
+#include <queue>
+
 #include "TTMap.hpp"
 #include "Eums.h"
 
@@ -118,6 +120,13 @@ public:
     }
     
     V remove(const K &key) {
+        TTHashMapNode<K, V> *node = getNode(key);
+        if (node != nullptr) {
+            V value = node->value;
+            remove(node);
+            return value;
+        }
+        
         return NULL;
     }
     
@@ -126,7 +135,54 @@ public:
     }
     
     bool containsValue(V &value) {
-        return true;
+        if (m_size == 0) return false;
+        queue<TTHashMapNode<K, V> *> q;
+        for (int i = 0; i < m_capacity; i++) {
+            if (m_table[i] == nullptr) continue;
+            q.push(m_table[i]);
+            while (!q.empty()) {
+                int len = (int)q.size();
+                for (int i = 0; i < len; i++) {
+                    TTHashMapNode<K, V> *node = q.front();
+                    q.pop();
+                    if (node->value == value) return true;
+                    if (node->left != nullptr) {
+                        q.push(node->left);
+                    }
+                    
+                    if (node->right != nullptr) {
+                        q.push(node->right);
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    void traversal() {
+        if (m_size == 0) return;
+        queue<TTHashMapNode<K, V> *> q;
+        for (int i = 0; i < m_capacity; i++) {
+            if (m_table[i] == nullptr) continue;
+            q.push(m_table[i]);
+            while (!q.empty()) {
+                int len = (int)q.size();
+                for (int i = 0; i < len; i++) {
+                    TTHashMapNode<K, V> *node = q.front();
+                    q.pop();
+                    //暂时先遍历打印
+                    cout << node->value << endl;
+                    if (node->left != nullptr) {
+                        q.push(node->left);
+                    }
+                    
+                    if (node->right != nullptr) {
+                        q.push(node->right);
+                    }
+                }
+            }
+        }
     }
     
 private:
