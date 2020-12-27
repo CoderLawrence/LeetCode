@@ -113,7 +113,8 @@ public:
     }
     
     V get(const K &key) {
-        return NULL;
+        TTHashMapNode<K, V> *node = getNode(key);
+        return node != nullptr ? node->value : NULL;
     }
     
     V remove(const K &key) {
@@ -121,7 +122,7 @@ public:
     }
     
     bool containsKey(const K &key) {
-        return true;
+        return getNode(key) != nullptr;
     }
     
     bool containsValue(V &value) {
@@ -138,7 +139,7 @@ private:
     
     //获取节点hash值
     int getIndex(TTHashMapNode<K, V> *node) {
-        
+        return (node->hash ^(node->hash >> 16)) & (m_capacity - 1);
     }
     
     V remove(TTHashMapNode<K, V> *node) {
@@ -320,32 +321,52 @@ private:
     bool valEquals(V &v1, V &v2) {
         return v1 == NULL ? v2 == NULL : v1 == v2;
     }
-    
-    void keyNotNullCheck(const K &key) {
-        //代码执行没有问题，目前所学c++知识还不能理解这样处理是否正确，后续优化
-        //有问题如果是对象类型的话会奔溃
-        if (key == NULL) {
-            throw invalid_argument("TTTreeMap::getNode() key can't be null");
-        }
-    }
-    
 #pragma mark -------------- 节点查找逻辑 --------------------------
-    /// 获取节点
     TTHashMapNode<K, V> *getNode(const K &key) {
-        keyNotNullCheck(key);
-        int index = getIndex(key);
-        TTHashMapNode<K, V> *node = m_table[index];
+        TTHashMapNode<K, V> *root = m_table[getIndex(key)];
+        return root == nullptr ? nullptr : getNode(root, key);
+    }
+    /// 获取节点
+    TTHashMapNode<K, V> *getNode(TTHashMapNode<K, V> *node, const K &k1) {
+        std::hash<K> hash_key;
+        int h1 = (int)hash_key(k1);
+//        TTHashMapNode<K, V> *result = nullptr;
+        //int cmp = 0;
         while (node != nullptr) {
-            int cmp = compare(key, node->key);
-            if (cmp == 0) {
+            //TODO: c++比较有问题，这里是Java的比较写法，这里需要判断类是否一致等equals
+           /*K k2 = node.key;
+            int h2 = node.hash;
+            // 先比较哈希值
+            if (h1 > h2) {
+                node = node.right;
+            } else if (h1 < h2) {
+                node = node.left;
+            } else if (Objects.equals(k1, k2)) {
                 return node;
-            } else if (cmp > 0) {
+            } else if (k1 != null && k2 != null
+                       && k1.getClass() == k2.getClass()
+                       && k1 instanceof Comparable
+                       && (cmp = ((Comparable) k1).compareTo(k2)) != 0) {
+                node = cmp > 0 ? node.right : node.left;
+            } else if (node.right != null && (result = node(node.right, k1)) != null) {
+                return result;
+            } else { // 只能往左边找
+                node = node.left;
+            }*/
+            
+            //暂时如此处理，后续补充c++知识再完善比较逻辑
+            K k2 = node->key;
+            int h2 = node->hash;
+            if (h1 > h2) {
                 node = node->right;
+            } else if (h1 < h2) {
+                node = node->left;
             } else {
                 node = node->left;
             }
         }
         
+//        return nullptr;
         return node;
     }
     
