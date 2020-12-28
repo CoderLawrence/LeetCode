@@ -701,6 +701,13 @@ int main(int argc, const char * argv[]) {
     vector<int> vec5 = {1, 2, 3, 4};
     ListNode *list5 = listWithArray(vec5);
     swapPairs(list5);
-
+    vector<int> vec6 = {1, 2, 3, 4, 5};
+    ListNode *list6 = listWithArray(vec6);
+    ListNode *res3 = swapPairs2(list6);
+    while (res3 != nullptr) {
+        cout << res3->val << endl;
+        res3 = res3->next;
+    }
+    
     return 0;
 }
