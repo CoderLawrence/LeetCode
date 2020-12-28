@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <stack>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -598,6 +599,51 @@ ListNode* reverseBetween(ListNode* head, int m, int n) {
     return result->next;
 }
 
+ListNode* swapPairs(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+    
+    stack<ListNode *> s;
+    //用于遍历原始的链表
+    ListNode *curr = head;
+    ListNode *p = new ListNode(-1);
+    //获得交换节点的第一个指针
+    head = p;
+    while (curr != nullptr && curr->next != nullptr) {
+        s.push(curr);
+        s.push(curr->next);
+        curr = curr->next->next;
+        
+        p->next = s.top();
+        p = p->next;
+        s.pop();
+        
+        p->next = s.top();
+        p = p->next;
+        s.pop();
+    }
+    
+    //注意边界条件，当链表长度是奇数时，cur就不为空
+    if (curr != nullptr) {
+        p->next = curr;
+    } else {
+        p->next = nullptr;
+    }
+    
+    return head->next;
+}
+
+ListNode* swapPairs2(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+    
+    ListNode *next = head->next;
+    head->next = swapPairs2(next->next);
+    next->next = head;
+    return next;
+}
 
 int main(int argc, const char * argv[]) {
     ListNode *head = new ListNode(1);
@@ -651,6 +697,10 @@ int main(int argc, const char * argv[]) {
     vector<int> vecs4 = {1, 2, 3, 4, 5};
     ListNode *list4 = listWithArray(vecs3);
     reverseBetween(list4, 2, 4);
+    
+    vector<int> vec5 = {1, 2, 3, 4};
+    ListNode *list5 = listWithArray(vec5);
+    swapPairs(list5);
 
     return 0;
 }
