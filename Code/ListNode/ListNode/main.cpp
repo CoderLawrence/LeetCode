@@ -684,6 +684,10 @@ int main(int argc, const char * argv[]) {
     vector<int> vecs2 = {1, 2, 3, 4, 5};
     ListNode *list2 = listWithArray(vecs2);
     ListNode *res1 = oddEvenList(list2);
+    while (res1 != nullptr) {
+        cout << res1->val << endl;
+        res1 = res1->next;
+    }
     
     cout << "insertionSortList" << endl;
     vector<int> vecs3 = {4, 2, 1, 5, 3};
