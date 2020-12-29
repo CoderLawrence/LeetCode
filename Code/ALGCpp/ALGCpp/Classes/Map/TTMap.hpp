@@ -21,7 +21,7 @@ public:
     virtual V get(const K &key) = 0;
     virtual V remove(const K &key) = 0;
     virtual bool containsKey(const K &key) = 0;
-    virtual bool containsValue(V &value) = 0;
+    virtual bool containsValue(const V &value) = 0;
 };
 
 #endif /* TTMap_hpp */

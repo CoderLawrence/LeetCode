@@ -171,7 +171,7 @@ public:
         return getNode(key) != nullptr;
     }
     
-    bool containsValue(V &value) {
+    bool containsValue(const V &value) {
         if (m_root == nullptr) return false;
         queue<TTMapNode<K, V> *> q;
         q.push(m_root);
@@ -383,7 +383,7 @@ private:
         }
     }
 #pragma mark ----------  辅助方法 -----------------------------
-    bool valEquals(V &v1, V &v2) {
+    bool valEquals(const V &v1, const V &v2) {
         return v1 == NULL ? v2 == NULL : v1 == v2;
     }
     

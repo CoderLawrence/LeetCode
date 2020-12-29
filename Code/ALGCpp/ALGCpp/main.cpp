@@ -223,10 +223,16 @@ void map_test() {
     cout << map->containsKey(2) << endl;
     delete map;
     
-    string str = "Jack";
+    cout << "--------------- TTHashMap -------------------" << endl;
     TTHashMap<string, int> hashMap;
     hashMap.put("Jack", 1);
-    hashMap.put("Jack", 1);
+    hashMap.put("Jack", 2);
+    hashMap.put("Rose", 10);
+    cout << hashMap.get("Jack") << endl;
+    cout << hashMap.size() << endl;
+    cout << hashMap.get("Rose") << endl;
+    cout << hashMap.containsKey("Jack") << endl;
+    cout << hashMap.containsValue(1) << endl;
 }
 
 void LRU_test() {

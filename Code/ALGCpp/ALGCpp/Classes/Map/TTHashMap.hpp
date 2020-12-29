@@ -110,8 +110,86 @@ public:
             return NULL;
         }
         
-        //添加新的节点到红黑树
-        return value;
+        // 添加新的节点到红黑树上面
+        TTHashMapNode<K, V> *parent = root;
+        TTHashMapNode<K, V> *node = root;
+        int cmp = 0;
+        K k1 = key;
+        std::hash<K> hash_key;
+        int h1 = (int)hash_key(k1);
+        TTHashMapNode<K, V> *result = nullptr;
+        bool searched = false; // 是否已经搜索过这个key
+        do {
+            parent = node;
+            K k2 = node->key;
+            /* 最优写法只是目前c++水平不够，后续需要实现
+            int h2 = node->hash;
+            if (h1 > h2) {
+                cmp = 1;
+            } else if (h1 < h2) {
+                cmp = -1;
+            } else if (Objects.equals(k1, k2)) {
+                cmp = 0;
+            } else if (k1 != null && k2 != null
+                       && k1 instanceof Comparable
+                       && k1.getClass() == k2.getClass()
+                       && (cmp = ((Comparable)k1).compareTo(k2)) != 0) {
+            } else if (searched) { // 已经扫描了
+                cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
+            } else { // searched == false; 还没有扫描，然后再根据内存地址大小决定左右
+                if ((node.left != null && (result = node(node.left, k1)) != null)
+                    || (node.right != null && (result = node(node.right, k1)) != null)) {
+                    // 已经存在这个key
+                    node = result;
+                    cmp = 0;
+                } else { // 不存在这个key
+                    searched = true;
+                    cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
+                }
+            }*/
+            
+           if (k1 == k2) {
+                cmp = 0;
+            } else if (searched) { // 已经扫描了
+                cmp = 1; //没有找到往右边查找
+            } else { // searched == false; 还没有扫描，然后再根据内存地址大小决定左右
+                if ((node->left != nullptr && (result = getNode(node->left, k1)) != nullptr)
+                    || (node->right != nullptr && (result = getNode(node->right, k1)) != nullptr)) {
+                    // 已经存在这个key
+                    node = result;
+                    cmp = 0;
+                } else { // 不存在这个key
+                    searched = true;
+                    cmp = 1;
+                }
+            }
+                
+            if (cmp > 0) {
+                node = node->right;
+            } else if (cmp < 0) {
+                node = node->left;
+            } else { // 相等
+                V oldValue = node->value;
+                node->key = key;
+                node->value = value;
+                node->hash = h1;
+                return oldValue;
+            }
+        } while (node != nullptr);
+        
+        // 看看插入到父节点的哪个位置
+        TTHashMapNode<K, V> *newNode = new TTHashMapNode<K, V>(key, value, parent);
+        if (cmp > 0) {
+            parent->right = newNode;
+        } else {
+            parent->left = newNode;
+        }
+        
+        m_size++;
+        
+        // 新添加节点之后的处理
+       // fixAfterPut(newNode);
+        return NULL;
     }
     
     V get(const K &key) {
@@ -134,7 +212,7 @@ public:
         return getNode(key) != nullptr;
     }
     
-    bool containsValue(V &value) {
+    bool containsValue(const V &value) {
         if (m_size == 0) return false;
         queue<TTHashMapNode<K, V> *> q;
         for (int i = 0; i < m_capacity; i++) {
@@ -386,12 +464,14 @@ private:
     TTHashMapNode<K, V> *getNode(TTHashMapNode<K, V> *node, const K &k1) {
         std::hash<K> hash_key;
         int h1 = (int)hash_key(k1);
-//        TTHashMapNode<K, V> *result = nullptr;
-        //int cmp = 0;
-        while (node != nullptr) {
-            //TODO: c++比较有问题，这里是Java的比较写法，这里需要判断类是否一致等equals
-           /*K k2 = node.key;
-            int h2 = node.hash;
+        TTHashMapNode<K, V> *result = nullptr;
+       // int cmp = 0;
+        do {
+            K k2 = node->key;
+            
+           //性能比价好的版本
+           /*
+            int h2 = node->hash;
             // 先比较哈希值
             if (h1 > h2) {
                 node = node.right;
@@ -411,19 +491,16 @@ private:
             }*/
             
             //暂时如此处理，后续补充c++知识再完善比较逻辑
-            K k2 = node->key;
-            int h2 = node->hash;
-            if (h1 > h2) {
-                node = node->right;
-            } else if (h1 < h2) {
-                node = node->left;
-            } else {
+            if (k1 == k2) {
+                return node;
+            } else if (node->right != nullptr && (result = getNode(node->right, k1)) != nullptr) {
+                return result;
+            } else { //只能往左边找
                 node = node->left;
             }
-        }
+        } while (node != nullptr);
         
-//        return nullptr;
-        return node;
+        return nullptr;
     }
     
     /*
