@@ -29,7 +29,8 @@ public:
     TTHashMapNode():TTHashMapNode(NULL, NULL, NULL) {}
     TTHashMapNode(const K &k, const V &v, TTHashMapNode<K, V> *parent):
         key(k), value(v), left(NULL), right(NULL), parent(parent) {
-        this->hash = hash ^(hash >> 16);
+        std::hash<K> hash_key;
+        hash = (int)hash_key(key);
     }
     
     ///是否存在左右子节点
@@ -122,8 +123,8 @@ public:
         do {
             parent = node;
             K k2 = node->key;
-            /* 最优写法只是目前c++水平不够，后续需要实现
             int h2 = node->hash;
+            /* 最优写法只是目前c++水平不够，后续需要实现
             if (h1 > h2) {
                 cmp = 1;
             } else if (h1 < h2) {
@@ -148,7 +149,11 @@ public:
                 }
             }*/
             
-           if (k1 == k2) {
+            if (h1 > h2) {
+                cmp = 1;
+            } else if (h1 < h2) {
+                cmp = -1;
+            } else if (k1 == k2) {
                 cmp = 0;
             } else if (searched) { // 已经扫描了
                 cmp = 1; //没有找到往右边查找
@@ -465,13 +470,12 @@ private:
         std::hash<K> hash_key;
         int h1 = (int)hash_key(k1);
         TTHashMapNode<K, V> *result = nullptr;
-       // int cmp = 0;
+//        int cmp = 0;
         do {
             K k2 = node->key;
-            
+            int h2 = node->hash;
            //性能比价好的版本
            /*
-            int h2 = node->hash;
             // 先比较哈希值
             if (h1 > h2) {
                 node = node.right;
@@ -491,7 +495,12 @@ private:
             }*/
             
             //暂时如此处理，后续补充c++知识再完善比较逻辑
-            if (k1 == k2) {
+            // 先比较哈希值
+            if (h1 > h2) {
+                node = node->right;
+            } else if (h1 < h2) {
+                node = node->left;
+            } else if (k1 == k2) {
                 return node;
             } else if (node->right != nullptr && (result = getNode(node->right, k1)) != nullptr) {
                 return result;
