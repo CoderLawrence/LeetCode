@@ -30,13 +30,15 @@ public:
     TTHashMapNode(const K &k, const V &v, TTHashMapNode<K, V> *parent):
         key(k), value(v), left(NULL), right(NULL), parent(parent) {
         std::hash<K> hash_key;
-        hash = (int)hash_key(key);
+        int hash = (int)hash_key(key);
+        this->hash = hash ^ (hash >> 16);
     }
     
     ///是否存在左右子节点
     bool hasTwoChildren() {
-        return this->left != nullptr && this->left != nullptr;
+        return this->left != nullptr && this->right != nullptr;
     }
+    
     /// 是否为叶子节点
     bool isLeaf() {
         return this->left == nullptr && this->right == nullptr;
@@ -70,7 +72,8 @@ class TTHashMap: public TTMap<K, V> {
 private:
     int m_size;
     int m_capacity;
-    static const int DEFUALT_CAPACITY = 1 << 4;
+    static constexpr int DEFUALT_CAPACITY = 1 << 4;
+    static constexpr float DEFUALT_LOAD_FACTOR = 0.75f;
     TTHashMapNode<K, V> *m_table[DEFUALT_CAPACITY];
 public:
     TTHashMap() {
@@ -102,6 +105,7 @@ public:
     }
     
     V put(const K &key, const V &value) {
+        resize();
         int index = getIndex(key);
         TTHashMapNode<K, V> *root = m_table[index];
         if (root == nullptr) {
@@ -116,39 +120,15 @@ public:
         TTHashMapNode<K, V> *node = root;
         int cmp = 0;
         K k1 = key;
-        std::hash<K> hash_key;
-        int h1 = (int)hash_key(k1);
+        int h1 = getHash(k1);
         TTHashMapNode<K, V> *result = nullptr;
         bool searched = false; // 是否已经搜索过这个key
         do {
             parent = node;
             K k2 = node->key;
             int h2 = node->hash;
-            /* 最优写法只是目前c++水平不够，后续需要实现
-            if (h1 > h2) {
-                cmp = 1;
-            } else if (h1 < h2) {
-                cmp = -1;
-            } else if (Objects.equals(k1, k2)) {
-                cmp = 0;
-            } else if (k1 != null && k2 != null
-                       && k1 instanceof Comparable
-                       && k1.getClass() == k2.getClass()
-                       && (cmp = ((Comparable)k1).compareTo(k2)) != 0) {
-            } else if (searched) { // 已经扫描了
-                cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
-            } else { // searched == false; 还没有扫描，然后再根据内存地址大小决定左右
-                if ((node.left != null && (result = node(node.left, k1)) != null)
-                    || (node.right != null && (result = node(node.right, k1)) != null)) {
-                    // 已经存在这个key
-                    node = result;
-                    cmp = 0;
-                } else { // 不存在这个key
-                    searched = true;
-                    cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
-                }
-            }*/
-            
+            // 最优写法只是目前c++水平不够，后续需要实现
+            // 还可以比较是否实现比较器、是否类型样等更加优化性能
             if (h1 > h2) {
                 cmp = 1;
             } else if (h1 < h2) {
@@ -269,16 +249,26 @@ public:
     }
     
 private:
+    //扩容
+    void resize() {
+        //装填因子小于0.75；
+        if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
+    }
+    
     //计算hash值获取索引
     int getIndex(const K &key) {
+        return getHash(key) & (m_capacity - 1);
+    }
+    
+    int getHash(const K &key) {
         std::hash<K> hash_key;
         int hash = (int)hash_key(key);
-        return (hash ^(hash >> 16)) & (m_capacity - 1);
+        return (hash ^(hash >> 16));
     }
     
     //获取节点hash值
     int getIndex(TTHashMapNode<K, V> *node) {
-        return (node->hash ^(node->hash >> 16)) & (m_capacity - 1);
+        return node->hash & (m_capacity - 1);
     }
     
     V remove(TTHashMapNode<K, V> *node) {
@@ -467,34 +457,14 @@ private:
     }
     /// 获取节点
     TTHashMapNode<K, V> *getNode(TTHashMapNode<K, V> *node, const K &k1) {
-        std::hash<K> hash_key;
-        int h1 = (int)hash_key(k1);
+        int h1 = getHash(k1);
         TTHashMapNode<K, V> *result = nullptr;
 //        int cmp = 0;
         do {
             K k2 = node->key;
             int h2 = node->hash;
-           //性能比价好的版本
-           /*
-            // 先比较哈希值
-            if (h1 > h2) {
-                node = node.right;
-            } else if (h1 < h2) {
-                node = node.left;
-            } else if (Objects.equals(k1, k2)) {
-                return node;
-            } else if (k1 != null && k2 != null
-                       && k1.getClass() == k2.getClass()
-                       && k1 instanceof Comparable
-                       && (cmp = ((Comparable) k1).compareTo(k2)) != 0) {
-                node = cmp > 0 ? node.right : node.left;
-            } else if (node.right != null && (result = node(node.right, k1)) != null) {
-                return result;
-            } else { // 只能往左边找
-                node = node.left;
-            }*/
-            
-            //暂时如此处理，后续补充c++知识再完善比较逻辑
+            //暂时如此处理，后续补充c++知识再完善比较逻辑,
+            //还可以比较是否类型一样是否实现了比较器等
             // 先比较哈希值
             if (h1 > h2) {
                 node = node->right;
