@@ -229,10 +229,16 @@ void map_test() {
     hashMap.put("Jack", "Rose");
     hashMap.put("Rose", "Jack");
     cout << hashMap.get("Jack") << endl;
-    cout << hashMap.size() << endl;
     cout << hashMap.get("Rose") << endl;
     cout << hashMap.containsKey("Jack") << endl;
     cout << hashMap.containsValue("Jack") << endl;
+    
+    for (int i = 0; i < 100; i++) {
+        hashMap.put(to_string(i), to_string(i));
+    }
+    
+    hashMap.traversal();
+    cout << hashMap.size() << endl;
 }
 
 void LRU_test() {

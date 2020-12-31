@@ -296,36 +296,6 @@ public:
     }
     
 private:
-    //扩容
-    void resize() {
-        //装填因子小于0.75；
-        if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
-        int newCapacity = (m_capacity << 1);
-        TTHashMapNode<K, V> *table = new TTHashMapNode<K, V>[newCapacity];
-        
-        queue<TTHashMapNode<K, V> *> q;
-        for (int i = 0; i < m_capacity; i++) {
-            TTHashMapNode<K, V> *root = &m_table[i];
-            if (root == nullptr || root->isEmpty()) continue;
-            q.push(root);
-            while (!q.empty()) {
-                TTHashMapNode<K, V> *node = q.front();
-                q.pop();
-                
-                if (node->left != nullptr) {
-                    q.push(node->left);
-                }
-                
-                if (node->right != nullptr) {
-                    q.push(node->right);
-                }
-            }
-        }
-        
-        m_table = table;
-        m_capacity = newCapacity;
-    }
-    
     //计算hash值获取索引
     int getIndex(const K &key) {
         return getHash(key) & (m_capacity - 1);
@@ -340,6 +310,102 @@ private:
     //获取节点hash值
     int getIndex(TTHashMapNode<K, V> *node) {
         return node->hash & (m_capacity - 1);
+    }
+    
+    //扩容
+    void resize() {
+        //装填因子小于0.75；
+        if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
+        int oldCapacity = m_capacity;
+        TTHashMapNode<K, V> *oldTable = m_table;
+        m_capacity = oldCapacity << 1;
+        m_table = new TTHashMapNode<K, V>[m_capacity];
+        queue<TTHashMapNode<K, V> *> q;
+        for (int i = 0; i < oldCapacity; i++) {
+            TTHashMapNode<K, V> *root = &oldTable[i];
+            if (root == nullptr || root->isEmpty()) continue;
+            q.push(root);
+            while (!q.empty()) {
+                TTHashMapNode<K, V> *node = q.front();
+                q.pop();
+                
+                if (node->left != nullptr) {
+                    q.push(node->left);
+                }
+                
+                if (node->right != nullptr) {
+                    q.push(node->right);
+                }
+                
+                moveNode(node);
+            }
+        }
+    }
+    
+    void moveNode(TTHashMapNode<K, V> *newNode) {
+        newNode->parent = nullptr;
+        newNode->right = nullptr;
+        newNode->left = nullptr;
+        newNode->color = RED;
+        int index = getIndex(newNode);
+        
+        TTHashMapNode<K, V> *root = &m_table[index];
+        if (root == nullptr || root->isEmpty()) {
+            root = newNode;
+            m_table[index] = root;
+            afterPut(root);
+            return;
+        }
+        
+        // 添加新的节点到红黑树上面
+        TTHashMapNode<K, V> *parent = root;
+        TTHashMapNode<K, V> *node = root;
+        int cmp = 0;
+        K k1 = newNode->getKey();
+        int h1 = newNode->hash;
+        TTHashMapNode<K, V> *result = nullptr;
+        bool searched = false; // 是否已经搜索过这个key
+        do {
+            parent = node;
+            K k2 = node->getKey();
+            int h2 = node->hash;
+            // 最优写法只是目前c++水平不够，后续需要实现
+            // 还可以比较是否实现比较器、是否类型样等更加优化性能
+            if (h1 > h2) {
+                cmp = 1;
+            } else if (h1 < h2) {
+                cmp = -1;
+            } else if (k1 == k2) {
+                cmp = 0;
+            } else if (searched) { // 已经扫描了
+                cmp = 1; //没有找到往右边查找
+            } else { // searched == false; 还没有扫描，然后再根据内存地址大小决定左右
+                if ((node->left != nullptr && (result = getNode(node->left, k1)) != nullptr)
+                    || (node->right != nullptr && (result = getNode(node->right, k1)) != nullptr)) {
+                    // 已经存在这个key
+                    node = result;
+                    cmp = 0;
+                } else { // 不存在这个key
+                    searched = true;
+                    cmp = 1;
+                }
+            }
+                
+            if (cmp > 0) {
+                node = node->right;
+            } else if (cmp < 0) {
+                node = node->left;
+            }
+        } while (node != nullptr);
+        
+        // 看看插入到父节点的哪个位置
+        if (cmp > 0) {
+            parent->right = newNode;
+        } else {
+            parent->left = newNode;
+        }
+        
+        afterPut(newNode);
     }
     
     V remove(TTHashMapNode<K, V> *node) {
