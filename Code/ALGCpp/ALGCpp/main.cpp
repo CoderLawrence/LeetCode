@@ -216,13 +216,12 @@ void set_test() {
 
 void map_test() {
     cout << "--------------- TTMap -------------------" << endl;
-    TTTreeMap<int, int> *map = new TTTreeMap<int, int>();
-    map->put(1, 1);
-    map->put(2, 1);
-    cout << map->containsKey(1) << endl;
-    cout << map->containsKey(2) << endl;
-    cout << map->containsValue(4) << endl;
-    delete map;
+    TTTreeMap<int, int> map;
+    map.put(1, 1);
+    map.put(2, 1);
+    cout << map.containsKey(1) << endl;
+    cout << map.containsKey(2) << endl;
+    cout << map.containsValue(4) << endl;
     
     cout << "--------------- TTHashMap -------------------" << endl;
     TTHashMap<string, string> hashMap;
