@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <queue>
-#include <type_traits>
+#include <optional>
 
 #include "TTMap.hpp"
 #include "Eums.h"
@@ -386,13 +386,14 @@ private:
     }
 #pragma mark ----------  辅助方法 -----------------------------
     bool valEquals(const V &v1, const V &v2) {
-        return v1 == NULL ? v2 == NULL : v1 == v2;
+        optional<V> rhs = make_optional<K>(v1);
+        optional<V> lhs = make_optional<K>(v2);
+        return rhs == lhs;
     }
     
     void keyNotNullCheck(const K &key) {
-        //代码执行没有问题，目前所学c++知识还不能理解这样处理是否正确，后续优化
-        //有问题如果是对象类型的话会奔溃
-        if (key == NULL) {
+        optional<K> op = make_optional<K>(key);
+        if (!op.has_value()) {
             throw invalid_argument("TTTreeMap::getNode() key can't be null");
         }
     }

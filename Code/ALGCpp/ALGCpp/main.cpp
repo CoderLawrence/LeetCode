@@ -221,6 +221,7 @@ void map_test() {
     map->put(2, 1);
     cout << map->containsKey(1) << endl;
     cout << map->containsKey(2) << endl;
+    cout << map->containsValue(4) << endl;
     delete map;
     
     cout << "--------------- TTHashMap -------------------" << endl;
@@ -233,7 +234,6 @@ void map_test() {
     cout << hashMap.get("Rose") << endl;
     cout << hashMap.containsKey("Jack") << endl;
     cout << hashMap.containsValue("Jack") << endl;
-   // hashMap.traversal();
 }
 
 void LRU_test() {
