@@ -35,6 +35,8 @@ public:
     TTMapNode():TTMapNode(NULL, NULL, NULL) {}
     TTMapNode(const K &k, const V &v, TTMapNode<K, V> *parent):
         key(k), value(v), left(NULL), right(NULL), parent(parent) {}
+   
+    
     ///是否存在左右子节点
     bool hasTwoChildren() {
         return this->left != nullptr && this->left != nullptr;

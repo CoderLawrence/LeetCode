@@ -9,6 +9,8 @@
 #define TTHashMap_hpp
 
 #include <queue>
+#include <iostream>
+#include <optional>
 
 #include "TTMap.hpp"
 #include "Eums.h"
@@ -19,19 +21,45 @@ template <class K, class V>
 class TTHashMapNode {
 public:
     int hash = 0;
-    K key;
-    V value;
+    optional<K> key;
+    optional<V> value;
     TTNodeColor color = RED;
     TTHashMapNode<K, V> *left;
     TTHashMapNode<K, V> *right;
     TTHashMapNode<K, V> *parent;
     
-    TTHashMapNode():TTHashMapNode(NULL, NULL, NULL) {}
-    TTHashMapNode(const K &k, const V &v, TTHashMapNode<K, V> *parent):
+    TTHashMapNode():TTHashMapNode(nullopt, nullopt, NULL) {}
+    TTHashMapNode(const optional<K> &k, const optional<V> &v, TTHashMapNode<K, V> *parent):
         key(k), value(v), left(NULL), right(NULL), parent(parent) {
-        std::hash<K> hash_key;
-        int hash = (int)hash_key(key);
-        this->hash = hash ^ (hash >> 16);
+            if (k.has_value()) {
+                std::hash<K> hash_key;
+                int hash = (int)hash_key(key.value());
+                this->hash = hash ^ (hash >> 16);
+            }
+    }
+    
+    K getKey() {
+        if (key.has_value()) {
+            return key.value();
+        }
+        
+        if (typeid(string) == typeid(K)) {
+            return K();
+        }
+        
+        return NULL;
+    }
+    
+    V getValue() {
+        if (value.has_value()) {
+            return value.value();
+        }
+        
+        if (typeid(string) == typeid(V)) {
+            return V();
+        }
+        
+        return NULL;
     }
     
     ///是否存在左右子节点
@@ -65,6 +93,24 @@ public:
         
         return nullptr;
     }
+    
+    TTHashMapNode<K, V>& operator=(const TTHashMapNode<K, V> *node) {
+        if (node == nullptr) return *this;
+        if (this != node) {
+            this->key = node->key;
+            this->value = node->value;
+            this->hash = node->hash;
+            this->parent = node->parent;
+            this->left = node->left;
+            this->right = node->right;
+        }
+        
+        return *this;
+    }
+    
+    bool isEmpty() {
+        return !key.has_value() && !value.has_value();
+    }
 };
 
 template <class K, class V>
@@ -74,12 +120,13 @@ private:
     int m_capacity;
     static constexpr int DEFUALT_CAPACITY = 1 << 4;
     static constexpr float DEFUALT_LOAD_FACTOR = 0.75f;
-    TTHashMapNode<K, V> *m_table[DEFUALT_CAPACITY];
+    TTHashMapNode<K, V> *m_table;
 public:
     TTHashMap() {
         m_size = 0;
         m_capacity = DEFUALT_CAPACITY;
-        memset(m_table, 0, sizeof(m_table));
+        m_table = new TTHashMapNode<K, V>[m_capacity];
+        memset(m_table, NULL, sizeof(*m_table) * m_capacity);
     }
     
     ~TTHashMap() {
@@ -97,7 +144,7 @@ public:
     void clear() {
         //释放内存
         for (int i = 0; i < m_capacity; i++) {
-            free(m_table[i]);
+            m_table[i] = nullptr;
         }
         
         m_size = 0;
@@ -107,12 +154,12 @@ public:
     V put(const K &key, const V &value) {
         resize();
         int index = getIndex(key);
-        TTHashMapNode<K, V> *root = m_table[index];
-        if (root == nullptr) {
+        TTHashMapNode<K, V> *root = &m_table[index];
+        if (root == nullptr || root->isEmpty()) {
             TTHashMapNode<K, V> *node = new TTHashMapNode<K, V>(key, value, nullptr);
             m_table[index] = node;
             m_size++;
-            return NULL;
+            return value;
         }
         
         // 添加新的节点到红黑树上面
@@ -125,7 +172,7 @@ public:
         bool searched = false; // 是否已经搜索过这个key
         do {
             parent = node;
-            K k2 = node->key;
+            K k2 = node->getKey();
             int h2 = node->hash;
             // 最优写法只是目前c++水平不够，后续需要实现
             // 还可以比较是否实现比较器、是否类型样等更加优化性能
@@ -154,7 +201,7 @@ public:
             } else if (cmp < 0) {
                 node = node->left;
             } else { // 相等
-                V oldValue = node->value;
+                V oldValue = node->getValue();
                 node->key = key;
                 node->value = value;
                 node->hash = h1;
@@ -174,18 +221,18 @@ public:
         
         // 新添加节点之后的处理
        // fixAfterPut(newNode);
-        return NULL;
+        return value;
     }
     
     V get(const K &key) {
         TTHashMapNode<K, V> *node = getNode(key);
-        return node != nullptr ? node->value : NULL;
+        return node != nullptr ? node->getValue() : NULL;
     }
     
     V remove(const K &key) {
         TTHashMapNode<K, V> *node = getNode(key);
         if (node != nullptr) {
-            V value = node->value;
+            V value = node->getValue();
             remove(node);
             return value;
         }
@@ -201,8 +248,8 @@ public:
         if (m_size == 0) return false;
         queue<TTHashMapNode<K, V> *> q;
         for (int i = 0; i < m_capacity; i++) {
-            if (m_table[i] == nullptr) continue;
-            q.push(m_table[i]);
+            if (&m_table[i] == nullptr) continue;
+            q.push(&m_table[i]);
             while (!q.empty()) {
                 int len = (int)q.size();
                 for (int i = 0; i < len; i++) {
@@ -227,15 +274,15 @@ public:
         if (m_size == 0) return;
         queue<TTHashMapNode<K, V> *> q;
         for (int i = 0; i < m_capacity; i++) {
-            if (m_table[i] == nullptr) continue;
-            q.push(m_table[i]);
+            if (&m_table[i] == nullptr) continue;
+            q.push(&m_table[i]);
             while (!q.empty()) {
                 int len = (int)q.size();
                 for (int i = 0; i < len; i++) {
                     TTHashMapNode<K, V> *node = q.front();
                     q.pop();
                     //暂时先遍历打印
-                    cout << node->value << endl;
+                    cout << "key:" << node->getKey() << ", value:" << node->getValue() << endl;
                     if (node->left != nullptr) {
                         q.push(node->left);
                     }
@@ -253,6 +300,16 @@ private:
     void resize() {
         //装填因子小于0.75；
         if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
+        int newCapacity = (m_capacity << 1);
+        TTHashMapNode<K, V> *table = new TTHashMapNode<K, V>[newCapacity];
+        for (int i = 0; i < m_capacity; i++) {
+            if (&m_table[i] != nullptr) {
+                table[i] = &m_table[i];
+            }
+        }
+        
+        m_table = table;
+        m_capacity = newCapacity;
     }
     
     //计算hash值获取索引
@@ -272,9 +329,9 @@ private:
     }
     
     V remove(TTHashMapNode<K, V> *node) {
-        if (node == nullptr) return node->value;
+        if (node == nullptr) return node->getValue();
         m_size--;
-        V oldValue = node->value;
+        V oldValue = node->getValue();
         if (node->left != nullptr && node->right != nullptr) { //度为2的节点
             //找到后继节点
             TTHashMapNode<K, V> *s = successor(node);
@@ -446,13 +503,9 @@ private:
             }
         }
     }
-#pragma mark ----------  辅助方法 -----------------------------
-    bool valEquals(V &v1, V &v2) {
-        return v1 == NULL ? v2 == NULL : v1 == v2;
-    }
 #pragma mark -------------- 节点查找逻辑 --------------------------
     TTHashMapNode<K, V> *getNode(const K &key) {
-        TTHashMapNode<K, V> *root = m_table[getIndex(key)];
+        TTHashMapNode<K, V> *root = &m_table[getIndex(key)];
         return root == nullptr ? nullptr : getNode(root, key);
     }
     /// 获取节点
@@ -461,7 +514,7 @@ private:
         TTHashMapNode<K, V> *result = nullptr;
 //        int cmp = 0;
         do {
-            K k2 = node->key;
+            K k2 = node->getKey();
             int h2 = node->hash;
             //暂时如此处理，后续补充c++知识再完善比较逻辑,
             //还可以比较是否类型一样是否实现了比较器等
@@ -562,7 +615,7 @@ private:
         } else if (grand->isRightChild()) {
             grand->parent->right = parent;
         } else {
-            m_table[getIndex(grand->key)] = parent;
+            m_table[getIndex(grand->getKey())] = parent;
         }
         
         if (child != nullptr) {
