@@ -302,9 +302,23 @@ private:
         if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
         int newCapacity = (m_capacity << 1);
         TTHashMapNode<K, V> *table = new TTHashMapNode<K, V>[newCapacity];
+        
+        queue<TTHashMapNode<K, V> *> q;
         for (int i = 0; i < m_capacity; i++) {
-            if (&m_table[i] != nullptr) {
-                table[i] = &m_table[i];
+            TTHashMapNode<K, V> *root = &m_table[i];
+            if (root == nullptr || root->isEmpty()) continue;
+            q.push(root);
+            while (!q.empty()) {
+                TTHashMapNode<K, V> *node = q.front();
+                q.pop();
+                
+                if (node->left != nullptr) {
+                    q.push(node->left);
+                }
+                
+                if (node->right != nullptr) {
+                    q.push(node->right);
+                }
             }
         }
         
