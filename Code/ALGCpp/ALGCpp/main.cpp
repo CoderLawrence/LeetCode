@@ -234,11 +234,15 @@ void map_test() {
     cout << hashMap.containsValue("Jack") << endl;
     
     for (int i = 0; i < 100; i++) {
-        hashMap.put(to_string(i), to_string(i));
+        hashMap.put(to_string(i), "Jack");
     }
     
     hashMap.traversal();
     cout << hashMap.size() << endl;
+    hashMap.remove("Jack");
+    hashMap.remove("99");
+    cout << "-----" << hashMap.size() << endl;
+    hashMap.traversal();
 }
 
 void LRU_test() {

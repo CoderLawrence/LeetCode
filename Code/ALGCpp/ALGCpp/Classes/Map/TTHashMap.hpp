@@ -94,23 +94,23 @@ public:
         return nullptr;
     }
     
-    TTHashMapNode<K, V>& operator=(const TTHashMapNode<K, V> *node) {
-        if (node == nullptr) return *this;
-        if (this != node) {
-            this->key = node->key;
-            this->value = node->value;
-            this->hash = node->hash;
-            this->parent = node->parent;
-            this->left = node->left;
-            this->right = node->right;
-        }
-        
-        return *this;
-    }
+//    TTHashMapNode<K, V>& operator=(const TTHashMapNode<K, V> *node) {
+//        if (node == nullptr) return *this;
+//        if (this != node) {
+//            this->key = node->key;
+//            this->value = node->value;
+//            this->hash = node->hash;
+//            this->parent = node->parent;
+//            this->left = node->left;
+//            this->right = node->right;
+//        }
+//
+//        return *this;
+//    }
     
-    bool isEmpty() {
-        return !key.has_value() && !value.has_value();
-    }
+//    bool isEmpty() {
+//        return !key.has_value() && !value.has_value();
+//    }
 };
 
 template <class K, class V>
@@ -120,13 +120,13 @@ private:
     int m_capacity;
     static constexpr int DEFUALT_CAPACITY = 1 << 4;
     static constexpr float DEFUALT_LOAD_FACTOR = 0.75f;
-    TTHashMapNode<K, V> *m_table;
+    TTHashMapNode<K, V> *m_table[DEFUALT_CAPACITY];
 public:
     TTHashMap() {
         m_size = 0;
         m_capacity = DEFUALT_CAPACITY;
-        m_table = new TTHashMapNode<K, V>[m_capacity];
-        memset(m_table, NULL, sizeof(*m_table) * m_capacity);
+//        m_table = new TTHashMapNode<K, V>[m_capacity];
+        memset(m_table, 0, sizeof(m_table));
     }
     
     ~TTHashMap() {
@@ -152,13 +152,14 @@ public:
     }
     
     V put(const K &key, const V &value) {
-        resize();
+       // resize();
         int index = getIndex(key);
-        TTHashMapNode<K, V> *root = &m_table[index];
-        if (root == nullptr || root->isEmpty()) {
-            TTHashMapNode<K, V> *node = new TTHashMapNode<K, V>(key, value, nullptr);
-            m_table[index] = node;
+        TTHashMapNode<K, V> *root = m_table[index];
+        if (root == nullptr) {
+            root = new TTHashMapNode<K, V>(make_optional<K>(key), make_optional<V>(value), nullptr);
+            m_table[index] = root;
             m_size++;
+            afterPut(root);
             return value;
         }
         
@@ -202,15 +203,15 @@ public:
                 node = node->left;
             } else { // 相等
                 V oldValue = node->getValue();
-                node->key = key;
-                node->value = value;
+                node->key = make_optional(key);
+                node->value = make_optional(value);
                 node->hash = h1;
                 return oldValue;
             }
         } while (node != nullptr);
         
         // 看看插入到父节点的哪个位置
-        TTHashMapNode<K, V> *newNode = new TTHashMapNode<K, V>(key, value, parent);
+        TTHashMapNode<K, V> *newNode = new TTHashMapNode<K, V>(make_optional<K>(key), make_optional<V>(value), NULL);
         if (cmp > 0) {
             parent->right = newNode;
         } else {
@@ -219,8 +220,9 @@ public:
         
         m_size++;
         
+        newNode->parent = parent;
         // 新添加节点之后的处理
-       // fixAfterPut(newNode);
+        afterPut(newNode);
         return value;
     }
     
@@ -248,8 +250,8 @@ public:
         if (m_size == 0) return false;
         queue<TTHashMapNode<K, V> *> q;
         for (int i = 0; i < m_capacity; i++) {
-            if (&m_table[i] == nullptr) continue;
-            q.push(&m_table[i]);
+            if (m_table[i] == nullptr) continue;
+            q.push(m_table[i]);
             while (!q.empty()) {
                 int len = (int)q.size();
                 for (int i = 0; i < len; i++) {
@@ -274,8 +276,8 @@ public:
         if (m_size == 0) return;
         queue<TTHashMapNode<K, V> *> q;
         for (int i = 0; i < m_capacity; i++) {
-            if (&m_table[i] == nullptr) continue;
-            q.push(&m_table[i]);
+            if (m_table[i] == nullptr) continue;
+            q.push(m_table[i]);
             while (!q.empty()) {
                 int len = (int)q.size();
                 for (int i = 0; i < len; i++) {
@@ -313,34 +315,34 @@ private:
     }
     
     //扩容
-    void resize() {
-        //装填因子小于0.75；
-        if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
-        int oldCapacity = m_capacity;
-        TTHashMapNode<K, V> *oldTable = m_table;
-        m_capacity = oldCapacity << 1;
-        m_table = new TTHashMapNode<K, V>[m_capacity];
-        queue<TTHashMapNode<K, V> *> q;
-        for (int i = 0; i < oldCapacity; i++) {
-            TTHashMapNode<K, V> *root = &oldTable[i];
-            if (root == nullptr || root->isEmpty()) continue;
-            q.push(root);
-            while (!q.empty()) {
-                TTHashMapNode<K, V> *node = q.front();
-                q.pop();
-                
-                if (node->left != nullptr) {
-                    q.push(node->left);
-                }
-                
-                if (node->right != nullptr) {
-                    q.push(node->right);
-                }
-                
-                moveNode(node);
-            }
-        }
-    }
+//    void resize() {
+//        //装填因子小于0.75；
+//        if (m_size/ m_capacity <= DEFUALT_LOAD_FACTOR) return;
+//        int oldCapacity = m_capacity;
+//        TTHashMapNode<K, V> *oldTable = m_table;
+//        m_capacity = oldCapacity << 1;
+//        m_table = new TTHashMapNode<K, V>[m_capacity];
+//        queue<TTHashMapNode<K, V> *> q;
+//        for (int i = 0; i < oldCapacity; i++) {
+//            TTHashMapNode<K, V> *root = &oldTable[i];
+//            if (root == nullptr || root->isEmpty()) continue;
+//            q.push(root);
+//            while (!q.empty()) {
+//                TTHashMapNode<K, V> *node = q.front();
+//                q.pop();
+//
+//                if (node->left != nullptr) {
+//                    q.push(node->left);
+//                }
+//
+//                if (node->right != nullptr) {
+//                    q.push(node->right);
+//                }
+//
+//                moveNode(node);
+//            }
+//        }
+//    }
     
     void moveNode(TTHashMapNode<K, V> *newNode) {
         newNode->parent = nullptr;
@@ -363,8 +365,6 @@ private:
         int cmp = 0;
         K k1 = newNode->getKey();
         int h1 = newNode->hash;
-        TTHashMapNode<K, V> *result = nullptr;
-        bool searched = false; // 是否已经搜索过这个key
         do {
             parent = node;
             K k2 = node->getKey();
@@ -375,20 +375,8 @@ private:
                 cmp = 1;
             } else if (h1 < h2) {
                 cmp = -1;
-            } else if (k1 == k2) {
-                cmp = 0;
-            } else if (searched) { // 已经扫描了
-                cmp = 1; //没有找到往右边查找
             } else { // searched == false; 还没有扫描，然后再根据内存地址大小决定左右
-                if ((node->left != nullptr && (result = getNode(node->left, k1)) != nullptr)
-                    || (node->right != nullptr && (result = getNode(node->right, k1)) != nullptr)) {
-                    // 已经存在这个key
-                    node = result;
-                    cmp = 0;
-                } else { // 不存在这个key
-                    searched = true;
-                    cmp = 1;
-                }
+                cmp = 1;
             }
                 
             if (cmp > 0) {
@@ -405,6 +393,7 @@ private:
             parent->left = newNode;
         }
         
+        newNode->parent = parent;
         afterPut(newNode);
     }
     
@@ -470,18 +459,17 @@ private:
         // uncle节点
         TTHashMapNode<K, V> *uncle = parent->sibling();
         //祖父节点
-        TTHashMapNode<K, V> *grand = parent->parent;
+        TTHashMapNode<K, V> *grand = red(parent->parent);
         if (isRed(uncle)) { //叔父节点是红色【B树节点上益】
             black(parent);
             black(uncle);
             //递归调用
-            afterPut(red(grand));
+            afterPut(grand);
             return;
         }
         
         //叔父节点不是红色
         if (parent->isLeftChild()) { // L
-            red(grand);
             if (node->isLeftChild()) { // LL
                 black(parent);
                 //有旋转祖父节点，放到下面统一处理
@@ -493,7 +481,6 @@ private:
             //祖父节点右旋
             rotateRight(grand);
         } else { //R
-            red(grand);
             if (node->isLeftChild()) { //RL
                 black(node);
                 rotateRight(parent);
@@ -585,7 +572,7 @@ private:
     }
 #pragma mark -------------- 节点查找逻辑 --------------------------
     TTHashMapNode<K, V> *getNode(const K &key) {
-        TTHashMapNode<K, V> *root = &m_table[getIndex(key)];
+        TTHashMapNode<K, V> *root = m_table[getIndex(key)];
         return root == nullptr ? nullptr : getNode(root, key);
     }
     /// 获取节点
