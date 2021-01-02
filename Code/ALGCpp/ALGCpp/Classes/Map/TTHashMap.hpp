@@ -116,17 +116,14 @@ public:
 template <class K, class V>
 class TTHashMap: public TTMap<K, V> {
 private:
-    int m_size;
-    int m_capacity;
+    int m_size = 0;
+    int m_capacity = DEFUALT_CAPACITY;
     static constexpr int DEFUALT_CAPACITY = 1 << 4;
     static constexpr float DEFUALT_LOAD_FACTOR = 0.75f;
-    TTHashMapNode<K, V> *m_table[DEFUALT_CAPACITY];
+    TTHashMapNode<K, V> *m_table[DEFUALT_CAPACITY] = {NULL};
 public:
     TTHashMap() {
-        m_size = 0;
-        m_capacity = DEFUALT_CAPACITY;
-//        m_table = new TTHashMapNode<K, V>[m_capacity];
-        memset(m_table, 0, sizeof(m_table));
+        
     }
     
     ~TTHashMap() {
