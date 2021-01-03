@@ -22,6 +22,7 @@
 #include "TTMap.hpp"
 #include "TTTreeMap.hpp"
 #include "TTHashMap.hpp"
+#include "TTLinkedHashMap.hpp"
 
 #include "TTLRUCache.hpp"
 
@@ -243,6 +244,11 @@ void map_test() {
     hashMap.remove("99");
     cout << "-----" << hashMap.size() << endl;
     hashMap.traversal();
+    
+    cout << "--------------- TTLinkedHashMap -------------------" << endl;
+    TTLinkedHashMap<string, string> linkedHashMap;
+    linkedHashMap.put("Jack", "Rose");
+    linkedHashMap.traversal();
 }
 
 void LRU_test() {

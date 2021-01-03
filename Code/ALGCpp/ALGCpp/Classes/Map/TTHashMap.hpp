@@ -128,6 +128,7 @@ public:
     
     ~TTHashMap() {
         clear();
+        delete [] *m_table;
     }
     
     int size() const {
@@ -139,6 +140,7 @@ public:
     }
     
     void clear() {
+        if (m_size == 0) return;
         //释放内存
         for (int i = 0; i < m_capacity; i++) {
             m_table[i] = nullptr;
