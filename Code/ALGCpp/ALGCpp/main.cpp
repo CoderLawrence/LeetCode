@@ -24,6 +24,8 @@
 #include "TTHashMap.hpp"
 #include "TTLinkedHashMap.hpp"
 
+#include "TTBinaryHeap.hpp"
+
 #include "TTLRUCache.hpp"
 
 using namespace std;
@@ -251,6 +253,13 @@ void map_test() {
     linkedHashMap.traversal();
 }
 
+void heap_test() {
+    cout << "--------------- TTBinaryHeap -------------------" << endl;
+    TTBinaryHeap<int> binaryHeap;
+    binaryHeap.add(100);
+    cout << "binaryHeap.get()" << binaryHeap.get() << endl;
+}
+
 void LRU_test() {
     cout << "--------------- LRUCache -------------------" << endl;
     LRUCache cache(2);
@@ -275,6 +284,7 @@ int main(int argc, const char * argv[]) {
     RBTree_test();
     set_test();
     map_test();
+    heap_test();
     LRU_test();
     
     return 0;

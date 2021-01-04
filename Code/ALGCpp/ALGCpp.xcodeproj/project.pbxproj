@@ -34,6 +34,8 @@
 		217D1A16258A66FB002A4595 /* TTMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTMap.hpp; sourceTree = "<group>"; };
 		217D1A1B258A6A5A002A4595 /* TTRBTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTRBTree.hpp; sourceTree = "<group>"; };
 		2181096025754618006E00EC /* AVLTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVLTree.hpp; sourceTree = "<group>"; };
+		2183CBFB25A36DAD008C56A8 /* TTHeap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTHeap.hpp; sourceTree = "<group>"; };
+		2183CC0025A36F60008C56A8 /* TTBinaryHeap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTBinaryHeap.hpp; sourceTree = "<group>"; };
 		218A43C92596F59E00B01F32 /* TTHashMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TTHashMap.hpp; sourceTree = "<group>"; };
 		219391AA254FF4F2003A4A29 /* ALGCpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ALGCpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		219391AD254FF4F2003A4A29 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -88,6 +90,15 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		2183CBF925A36D38008C56A8 /* Heap */ = {
+			isa = PBXGroup;
+			children = (
+				2183CBFB25A36DAD008C56A8 /* TTHeap.hpp */,
+				2183CC0025A36F60008C56A8 /* TTBinaryHeap.hpp */,
+			);
+			path = Heap;
+			sourceTree = "<group>";
+		};
 		219391A1254FF4F2003A4A29 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +127,7 @@
 		219391B5254FF501003A4A29 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				2183CBF925A36D38008C56A8 /* Heap */,
 				21D2B3E42594873B005EA471 /* LRU */,
 				217D1A14258A66E6002A4595 /* Map */,
 				211BA90E258A2E5D00D08DB3 /* Set */,
