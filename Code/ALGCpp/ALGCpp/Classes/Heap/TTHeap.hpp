@@ -20,7 +20,7 @@ public:
     /// 获取对顶元素
     virtual T get() = 0;
     /// 删除堆顶元素
-    virtual void remove() = 0;
+    virtual T remove() = 0;
     virtual void clear() = 0;
 };
 

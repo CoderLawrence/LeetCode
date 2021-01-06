@@ -256,8 +256,14 @@ void map_test() {
 void heap_test() {
     cout << "--------------- TTBinaryHeap -------------------" << endl;
     TTBinaryHeap<int> binaryHeap;
+    binaryHeap.add(90);
+    binaryHeap.add(50);
+    binaryHeap.add(68);
+    binaryHeap.add(43);
     binaryHeap.add(100);
-    cout << "binaryHeap.get()" << binaryHeap.get() << endl;
+    cout << "binaryHeap::get()" << binaryHeap.get() << endl;
+    cout << "binaryHeap::print()" << binaryHeap.get() << endl;
+    binaryHeap.print();
 }
 
 void LRU_test() {
