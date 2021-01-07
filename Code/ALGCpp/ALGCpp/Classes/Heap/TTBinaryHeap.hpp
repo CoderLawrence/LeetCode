@@ -68,21 +68,25 @@ private:
     }
     
     void siftDown(int index) {
-        T e = m_data[index];
-        while (index < m_size) {
-            //获得子节点(i * 2) + 2
-            int right = (index >> 1) + 2;
-            int left = (index >> 1) + 1;
-            T leftNode = m_data[left];
-            T rightNode = m_data[right];
-            if (e <= left) {
-                
-            } else if (e <= right) {
-                
-            } else {
-                return;
+        T element = m_data[index];
+        int half = m_size >> 1;
+        while (index < half) { //必须保证index位置为非叶子节点
+            //获得子节点(i * 2) + 1，默认为左子节点
+            int childIndex = (index << 1) + 1;
+            T child = m_data[childIndex];
+            int rightIndex = childIndex + 1;
+            //比较左右子节点，看哪个子节点的值比较大
+            if (rightIndex < m_size && compare(m_data[rightIndex], child) > 0) {
+                childIndex = rightIndex;
+                child = m_data[rightIndex];
             }
+            
+            if (compare(element, child) >= 0) break;
+            m_data[index] = child;
+            index = childIndex;
         }
+        
+        m_data[index] = element;
     }
 public:
     TTBinaryHeap() {
@@ -128,6 +132,21 @@ public:
         m_data[lastIndex] = NULL;
         siftDown(0);
         return element;
+    }
+    
+    T replace(const T &element) {
+        nullElementCheck(element);
+        T root = NULL;
+        if (m_size == 0) {
+            m_data[0] = element;
+            m_size++;
+        } else {
+            root = m_data[0];
+            m_data[0] = element;
+            siftDown(0);
+        }
+        
+        return root;
     }
     
     void clear () {

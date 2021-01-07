@@ -22,6 +22,8 @@ public:
     /// 删除堆顶元素
     virtual T remove() = 0;
     virtual void clear() = 0;
+    ///删除堆顶元素，然后再添加元素
+    virtual T replace(const T &element) = 0;
 };
 
 #endif /* TTHeap_hpp */

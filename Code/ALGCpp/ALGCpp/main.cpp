@@ -264,6 +264,9 @@ void heap_test() {
     cout << "binaryHeap::get()" << binaryHeap.get() << endl;
     cout << "binaryHeap::print()" << binaryHeap.get() << endl;
     binaryHeap.print();
+    binaryHeap.remove();
+    cout << "binaryHeap::print()" << binaryHeap.get() << endl;
+    binaryHeap.print();
 }
 
 void LRU_test() {
