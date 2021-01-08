@@ -13,17 +13,21 @@
 #include <vector>
 
 /// 默认是实现大顶堆的二叉堆
-/// 这里使用数组实现
+/// 这里使用数组实现，数组里面的元素存储符合完成二叉树的性质
 template <class T>
 class TTBinaryHeap: public TTHeap<T> {
 private:
     T *m_data;
     int m_size = 0;
     int m_capacity = 0;
+    /// 是否为最小堆
+    bool isMinHeap = false;
     static constexpr int DEFUALT_CAPACITY = 10;
     
     /// e1 > e2  >> 1；e1 == e2 >> 0；e1 < e2 >> -1
     int compare(const T &e1, const T &e2) {
+        //本质上是利用了比较器来处理是否为最小堆，e2 - e1 > 0就会把e2放到堆顶
+        if (isMinHeap) return e2 - e1;
         return e1 > e2 ? 1 : e1 == e2 ? 0 : -1;
     }
     
@@ -98,13 +102,13 @@ private:
         }
     }
 public:
-    TTBinaryHeap() {
+    TTBinaryHeap(bool min_heap = false):isMinHeap(min_heap) {
         m_capacity = DEFUALT_CAPACITY;
         m_data = new T[m_capacity];
     }
     
     /// 批量建堆接口
-    TTBinaryHeap(const vector<T> &elements) {
+    TTBinaryHeap(const vector<T> &elements, bool min_heap = false):isMinHeap(min_heap) {
         int len =  (int)elements.size();
         if (len <= 0) {
             m_capacity = DEFUALT_CAPACITY;

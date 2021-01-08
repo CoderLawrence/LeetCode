@@ -270,7 +270,7 @@ void heap_test() {
     
     cout << "--------------- TTBinaryHeap init elements -------------------" << endl;
     vector<int> elements = {1, 5, 50 ,20, 30, 11, 3, 20};
-    TTBinaryHeap<int> heap(elements);
+    TTBinaryHeap<int> heap(elements, true);
     cout << "binaryHeap::get()" << heap.get() << endl;
     cout << "binaryHeap::print()" << heap.get() << endl;
     heap.print();
