@@ -10,6 +10,7 @@
 
 #include "TTHeap.hpp"
 #include <optional>
+#include <vector>
 
 /// 默认是实现大顶堆的二叉堆
 /// 这里使用数组实现
@@ -69,6 +70,7 @@ private:
     
     void siftDown(int index) {
         T element = m_data[index];
+        ///其实就是第一个叶子结点的前一个节点开始，因为这样才有子节点进行比较（完全二叉树的性质）
         int half = m_size >> 1;
         while (index < half) { //必须保证index位置为非叶子节点
             //获得子节点(i * 2) + 1，默认为左子节点
@@ -88,10 +90,35 @@ private:
         
         m_data[index] = element;
     }
+    
+    void heapify() {
+        // 自下而上的下滤
+        for (int i = (m_size >> 1) - 1; i >= 0; i--) {
+            siftDown(i);
+        }
+    }
 public:
     TTBinaryHeap() {
         m_capacity = DEFUALT_CAPACITY;
         m_data = new T[m_capacity];
+    }
+    
+    /// 批量建堆接口
+    TTBinaryHeap(const vector<T> &elements) {
+        int len =  (int)elements.size();
+        if (len <= 0) {
+            m_capacity = DEFUALT_CAPACITY;
+            m_data = new T[m_capacity];
+        } else { //批量建堆
+            m_size = len;
+            m_capacity = max(len, DEFUALT_CAPACITY);
+            m_data = new T[m_capacity];
+            for (int i = 0; i < m_size; i++) {
+                m_data[i] = elements[i];
+            }
+            
+            heapify();
+        }
     }
     
     ~TTBinaryHeap() {

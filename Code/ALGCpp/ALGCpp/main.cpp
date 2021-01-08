@@ -267,6 +267,16 @@ void heap_test() {
     binaryHeap.remove();
     cout << "binaryHeap::print()" << binaryHeap.get() << endl;
     binaryHeap.print();
+    
+    cout << "--------------- TTBinaryHeap init elements -------------------" << endl;
+    vector<int> elements = {1, 5, 50 ,20, 30, 11, 3, 20};
+    TTBinaryHeap<int> heap(elements);
+    cout << "binaryHeap::get()" << heap.get() << endl;
+    cout << "binaryHeap::print()" << heap.get() << endl;
+    heap.print();
+    heap.remove();
+    cout << "binaryHeap::print()" << heap.get() << endl;
+    heap.print();
 }
 
 void LRU_test() {
