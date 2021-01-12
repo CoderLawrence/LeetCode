@@ -13,6 +13,7 @@
 #include <iostream>
 #include <deque>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -93,23 +94,82 @@ private:
     /// @param node 开始遍历子树的节点
     void preorderTraversal(TTTreeNode<T> *node) {
         if (node == nullptr) return;
-        cout << node->element << endl;
-        preorderTraversal(node->left);
-        preorderTraversal(node->right);
+        //前序遍历二叉树
+        stack<TTTreeNode<T> *> s;
+        s.push(node);
+        while (!s.empty()) {
+            TTTreeNode<T> *child = s.top();
+            cout << child->element << endl;
+            s.pop();
+            if (child->right != nullptr) {
+                s.push(child->right);
+            }
+            
+            if (child->left != nullptr) {
+                s.push(child->left);
+            }
+        }
+        
+        //递归实现
+        //cout << node->element << endl;
+        //preorderTraversal(node->left);
+        //preorderTraversal(node->right);
     }
     
     void inorderTraversal(TTTreeNode<T> *node) {
         if (node == nullptr) return;
-        inorderTraversal(node->left);
-        cout << node->element << endl;
-        inorderTraversal(node->right);
+        TTTreeNode<T> *child = node;
+        stack<TTTreeNode<T> *> s;
+        while (true) {
+            //如果节点不为空一直往左走，然后入栈知道不能往下走
+            if (child != nullptr) {
+                s.push(child);
+                child = child->left;
+            } else if (s.empty()) {
+                return; //如果栈为空结束遍历
+            } else { //如果栈不为空出栈遍历节点，然后往右走循环知道栈为空
+                child = s.top();
+                s.pop();
+                cout << child->element << endl;
+                child = child->right;
+            }
+        }
+        
+        //递归实现
+        //inorderTraversal(node->left);
+        //cout << node->element << endl;
+        //inorderTraversal(node->right);
     }
     
     void postorderTraversal(TTTreeNode<T> *node) {
         if (node == nullptr) return;
-        postorderTraversal(node->left);
-        postorderTraversal(node->right);
-        cout << node->element << endl;
+        stack<TTTreeNode<T> *> s;
+        s.push(node);
+        TTTreeNode<T> *prev = nullptr;
+        while (!s.empty()) {
+            //获取暂定元素判断是否需要入栈，如果不满足条件则出栈
+            TTTreeNode<T> *top = s.top();
+            //如果是叶子节点或者是上一个遍历完节点的父节点则出栈遍历
+            if (top->isLeaf() || (prev != nullptr && (top->left == prev || top->right == prev))) {
+                prev = s.top();
+                s.pop();
+                cout << prev->element << endl;
+            } else {
+                //先一直往左走直到不能往左，往左的同时把右子节点和左子节点入栈
+                if (top->right != nullptr) {
+                    s.push(top->right);
+                }
+                
+                if (top->left != nullptr) {
+                    s.push(top->left);
+                }
+            }
+        }
+        
+        //递归实现
+        //postorderTraversal(node->left);
+        //postorderTraversal(node->right);
+        //cout << node->element << endl;
     }
     
     /*

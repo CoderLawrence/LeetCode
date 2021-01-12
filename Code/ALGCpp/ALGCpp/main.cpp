@@ -96,7 +96,7 @@ void BSTTree_test() {
     BSTree.add(13);
     BSTree.add(16);
     //前序遍历
-    cout << "BSTree::inorderTraversal()" << endl;
+    cout << "BSTree::preorderTraversal()" << endl;
     BSTree.preorderTraversal();
     //中序遍历
     cout << "BSTree::inorderTraversal()" << endl;
@@ -128,7 +128,7 @@ void AVLTree_test() {
     AVLTree.add(13);
     AVLTree.add(16);
     //前序遍历
-    cout << "AVLTree::inorderTraversal()" << endl;
+    cout << "AVLTree::preorderTraversal()" << endl;
     AVLTree.preorderTraversal();
     //中序遍历
     cout << "BSTree::inorderTraversal()" << endl;
